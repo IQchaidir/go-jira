@@ -1,6 +1,6 @@
-import WorkSpace from "@/components/WorkSpace"
 import { board } from "@/types/board.type"
 import { card } from "@/types/card.type"
+import { list } from "@/types/list.type"
 import { workspace } from "@/types/workspace.type"
 
 export const defaultWorkspaces = [
@@ -31,15 +31,28 @@ export const defaultBoards = [
     },
 ]
 
-export const defaultCards = [
+export const defaultLists = [
     {
         id: 1,
         boardId: 1,
-        title: "homepage",
+        title: "To Do",
     },
     {
         id: 2,
         boardId: 1,
+        title: "Done",
+    },
+]
+
+export const defaultCards = [
+    {
+        id: 1,
+        listId: 1,
+        title: "homepage",
+    },
+    {
+        id: 2,
+        listId: 1,
         title: "interactive",
     },
 ]
@@ -119,4 +132,21 @@ export function loadBoardById(id: number) {
     })
 
     return board
+}
+
+export function saveLists(lists: list[]) {
+    localStorage.setItem("lists", JSON.stringify(lists))
+}
+export function loadLists() {
+    const lists = localStorage.getItem("lists")
+
+    if (!lists) {
+        saveLists([])
+    }
+
+    try {
+        return JSON.parse(lists || "[]")
+    } catch (error) {
+        console.error("failed to load lists", error)
+    }
 }

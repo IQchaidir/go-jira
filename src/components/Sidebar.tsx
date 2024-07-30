@@ -1,4 +1,4 @@
-import { Building } from "lucide-react"
+import { Building, LayoutDashboard } from "lucide-react"
 import { Link } from "react-router-dom"
 import { CreateWorkspaceDialog } from "./CreateWorkspaceDialog"
 import { useEffect, useState } from "react"
@@ -21,10 +21,18 @@ const Sidebar = () => {
     }, [])
 
     return (
-        <div className="hidden md:flex flex-col gap-2 w-1/5 shadow-md px-3 text-lg font-semibold">
+        <aside className="hidden md:flex flex-col gap-2 w-1/5 shadow-md px-3 text-lg font-semibold">
             <div className="flex justify-between mt-10">
                 <span>Workspace</span> <CreateWorkspaceDialog />
             </div>
+            <Link to={`/`}>
+                <div className="flex gap-2 items-center cursor-pointer">
+                    <div className="p-1 bg-blue-500 rounded-md text-white">
+                        <LayoutDashboard />
+                    </div>
+                    <span>Dashboard</span>
+                </div>
+            </Link>
             {workspaces.map((workspace) => (
                 <Link key={workspace.id} to={`workspace/${workspace.id}`}>
                     <div className="flex gap-2 items-center cursor-pointer">
@@ -35,7 +43,7 @@ const Sidebar = () => {
                     </div>
                 </Link>
             ))}
-        </div>
+        </aside>
     )
 }
 

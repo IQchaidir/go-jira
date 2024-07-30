@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { workspace } from "@/types/workspace.type"
 import { board } from "@/types/board.type"
-import { defaultBoards, loadBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
+import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
+import { filterBoardByWokrspace } from "@/utils/filter"
 
 const WorkSpace = () => {
     const { workspaceId } = useParams()
@@ -12,24 +13,22 @@ const WorkSpace = () => {
     const [workspace, setWorkspace] = useState<workspace>()
 
     useEffect(() => {
-        let boardsToSave = defaultBoards
-
-        const localBoards = localStorage.getItem("boards")
-        if (localBoards) {
-            boardsToSave = JSON.parse(localBoards)
-        }
-
-        saveBoard(boardsToSave)
-        setBoards(loadBoards())
-
         if (workspaceId) {
             const currentWorkspace = loadWorkspaceById(Number(workspaceId))
             setWorkspace(currentWorkspace)
         }
+
+        let boardsToSave = defaultBoards
+        const localBoards = localStorage.getItem("boards")
+        if (localBoards) {
+            boardsToSave = JSON.parse(localBoards)
+        }
+        saveBoard(boardsToSave)
+        setBoards(filterBoardByWokrspace(Number(workspaceId)))
     }, [workspaceId])
 
     return (
-        <div className="flex flex-col mt-10 px-10 w-full">
+        <section className="flex flex-col mt-10 px-10 w-full">
             <div className="flex items-center text-2xl font-semibold gap-2 ">
                 <div className="p-1 bg-purple-500 rounded-md text-white">
                     <Building className="w-8 h-8" />
@@ -51,7 +50,7 @@ const WorkSpace = () => {
                 ))}
                 <CreateBoardDialog />
             </div>
-        </div>
+        </section>
     )
 }
 

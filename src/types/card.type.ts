@@ -1,5 +1,5 @@
 export interface card {
     id: number
-    boardId: number
+    listId: number
     title: string
 }
