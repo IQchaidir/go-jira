@@ -17,7 +17,7 @@ export function WorkspaceAccordion({ workspace }: { workspace: workspace }) {
                 </AccordionTrigger>
                 <AccordionContent>
                     <Link to={`workspace/${workspace.id}`}>
-                        <div className="flex gap-1 items-center cursor-pointer ml-4 mb-1">
+                        <div className="flex gap-1 items-center cursor-pointer ml-4 mb-3">
                             <div className="p-1 rounded-md text-gray-500">
                                 <Clipboard className="w-5 h-5" />
                             </div>

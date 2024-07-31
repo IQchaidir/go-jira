@@ -27,7 +27,7 @@ const Board = () => {
     }, [boardId])
 
     return (
-        <section className="flex flex-col mt-10 px-10 w-full">
+        <section className="flex flex-col mt-10 px-7 w-full">
             <div className="flex items-center text-2xl font-semibold gap-2 ">
                 <div className="p-1 bg-purple-500 rounded-md text-white">
                     <Building className="w-8 h-8" />

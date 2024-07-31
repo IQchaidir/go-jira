@@ -88,10 +88,8 @@ const Dashboard = () => {
     ]
 
     return (
-        <section className="flex flex-col mt-10 px-10 w-full">
-            <div className="text-2xl font-semibold gap-2 ">
-                <span>Welcome Back!</span>
-            </div>
+        <section className="flex flex-col  mt-10 px-7 w-full">
+            <h1 className="text-2xl font-semibold gap-2 ">Welcome Back!</h1>
             <hr className="mt-3 mb-5 border" />
             <section className="flex gap-4">
                 <div className="flex flex-col w-2/3">

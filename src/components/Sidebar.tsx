@@ -22,12 +22,12 @@ const Sidebar = () => {
     }, [])
 
     return (
-        <aside className="hidden md:flex flex-col gap-2 w-1/4 shadow-md pl-10 pr-3 text-lg font-semibold">
-            <div className="flex justify-between mt-10">
-                <span>Workspace</span> <CreateWorkspaceDialog />
+        <aside className="hidden md:flex flex-col w-1/4 shadow-md pl-7 pr-3 text-lg font-semibold">
+            <div className="flex justify-between mt-11">
+                <span>Workspaces</span> <CreateWorkspaceDialog />
             </div>
             <Link to={`/`}>
-                <div className="flex gap-2 items-center cursor-pointer">
+                <div className="flex gap-2 items-center cursor-pointer mt-2 mb-2">
                     <div className="p-1 bg-blue-500 rounded-md text-white">
                         <LayoutDashboard />
                     </div>

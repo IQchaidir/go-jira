@@ -13,22 +13,22 @@ const DetailCard = ({
 }) => {
     return (
         <div className="flex justify-between items-center bg-gray-100 rounded-md p-2">
-            <div className="text-base flex-1">{card.title}</div>
+            <div className="text-base font-semibold flex-1">{card.title}</div>
             <div className="flex flex-col text-xs gap-2  flex-1">
-                <span className="">Created at</span>
-                <span className="">18/07/2024</span>
+                <span className="font-semibold">Created at</span>
+                <span>18/07/2024</span>
             </div>
             <div className="flex flex-col text-xs gap-2 flex-1 ">
-                <span className="">Workspace</span>
-                <span className="">{workspaceTitle}</span>
+                <span className="font-semibold">Workspace</span>
+                <span>{workspaceTitle}</span>
             </div>
             <div className="flex flex-col text-xs gap-2 flex-1 ">
-                <span className="">Board</span>
-                <span className="">{boardTitle}</span>
+                <span className="font-semibold">Board</span>
+                <span>{boardTitle}</span>
             </div>
             <div className="flex flex-col text-xs gap-2 flex-1">
-                <span className="">List</span>
-                <span className="">{listTitle}</span>
+                <span className="font-semibold">List</span>
+                <span>{listTitle}</span>
             </div>
         </div>
     )
