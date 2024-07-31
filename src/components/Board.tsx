@@ -1,12 +1,10 @@
-import { Building, Ellipsis, Plus } from "lucide-react"
+import { Building } from "lucide-react"
 import CreateListDialog from "./CreateListDialog"
-import CreateCardDialog from "./CreateCardDialog"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import type { board } from "@/types/board.type"
-import { card } from "@/types/card.type"
-import { defaultCards, loadBoardById, loadWorkspaceById, saveCard } from "@/utils/storage"
-import { filterCardByList, filterlistByBoard } from "@/utils/filter"
+import { loadBoardById, loadWorkspaceById } from "@/utils/storage"
+import { filterlistByBoard } from "@/utils/filter"
 import { workspace } from "@/types/workspace.type"
 import { list } from "@/types/list.type"
 import List from "./List"
@@ -14,7 +12,6 @@ import List from "./List"
 const Board = () => {
     const { boardId } = useParams()
     const [workspace, setWorkspace] = useState<workspace>()
-    const [cards, setCards] = useState<card[]>([])
     const [board, setBoard] = useState<board>()
     const [lists, setLists] = useState<list[]>([])
 

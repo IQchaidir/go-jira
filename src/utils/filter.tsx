@@ -1,7 +1,8 @@
 import { board } from "@/types/board.type"
-import { loadBoards, loadCards, loadLists } from "./storage"
+import { loadActivities, loadBoards, loadCards, loadLists } from "./storage"
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
+import { activity } from "@/types/activity.type"
 
 export function filterBoardByWokrspace(workspaceId: number) {
     const boards = loadBoards()
@@ -28,4 +29,13 @@ export function filterCardByList(listId: number) {
     })
 
     return filterCard
+}
+
+export function filterActivityByWorkspace(workspaceId: number) {
+    const activities = loadActivities()
+    const filterActivity = activities.filter((activity: activity) => {
+        return activity.workSpaceId === workspaceId
+    })
+
+    return filterActivity
 }

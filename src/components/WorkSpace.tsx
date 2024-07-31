@@ -1,4 +1,4 @@
-import { Building, User } from "lucide-react"
+import { Building, Clipboard, User } from "lucide-react"
 import CreateBoardDialog from "./CreateBoardDialog"
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
@@ -37,7 +37,7 @@ const WorkSpace = () => {
             </div>
             <hr className="mt-3 mb-5 border" />
             <div className="flex gap-2 text-lg font-semibold px-5">
-                <User />
+                <Clipboard />
                 <span>Your Board</span>
             </div>
             <div className="grid grid-cols-4 gap-5 px-5 mt-5">

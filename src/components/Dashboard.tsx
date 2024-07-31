@@ -2,14 +2,18 @@ import { board } from "@/types/board.type"
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
 import { workspace } from "@/types/workspace.type"
+import { activityDetails, cardDetails } from "@/utils/getDetail"
 import {
+    defaultActivities,
     defaultBoards,
     defaultCards,
     defaultLists,
+    loadActivities,
     loadBoards,
     loadCards,
     loadLists,
     loadWorkspaces,
+    saveActivity,
     saveBoard,
     saveCard,
     saveLists,
@@ -17,12 +21,17 @@ import {
 import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"
 import { useEffect, useState } from "react"
+import DetailCard from "./DetailCard"
+
+import { activity as typeActivity } from "@/types/activity.type"
+import Activity from "./Activity"
 
 const Dashboard = () => {
     const [workspaces, setWorkspaces] = useState<workspace[]>([])
     const [boards, setBoards] = useState<board[]>([])
     const [cards, setCards] = useState<card[]>([])
     const [lists, setLists] = useState<list[]>([])
+    const [activities, setActivities] = useState<typeActivity[]>([])
 
     useEffect(() => {
         setWorkspaces(loadWorkspaces())
@@ -50,6 +59,14 @@ const Dashboard = () => {
         }
         saveLists(listsToSave)
         setLists(loadLists())
+
+        let activitiesToSave = defaultActivities
+        const localActivities = localStorage.getItem("activities")
+        if (localActivities) {
+            activitiesToSave = JSON.parse(localActivities)
+        }
+        saveActivity(activitiesToSave)
+        setActivities(loadActivities())
     }, [])
 
     const items = [
@@ -76,7 +93,7 @@ const Dashboard = () => {
                 <span>Welcome Back!</span>
             </div>
             <hr className="mt-3 mb-5 border" />
-            <div className="flex gap-2">
+            <section className="flex gap-4">
                 <div className="flex flex-col w-2/3">
                     <div className="grid grid-cols-3 gap-3">
                         {items.map((item) => (
@@ -92,31 +109,45 @@ const Dashboard = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="flex flex-col mt-8">
-                        <h3 className="text-base font-semibold mb-5">Recent Tasks</h3>
-                        <div className="flex justify-between items-center bg-gray-100 rounded-md p-2">
-                            <div className="text-base flex-1">Title Task</div>
-                            <div className="flex flex-col text-xs gap-2  flex-1">
-                                <span className="">Created at</span>
-                                <span className="">18/07/2024</span>
-                            </div>
-                            <div className="flex flex-col text-xs gap-2 flex-1 ">
-                                <span className="">Workspace</span>
-                                <span className="">Lorem inc.</span>
-                            </div>
-                            <div className="flex flex-col text-xs gap-2 flex-1 ">
-                                <span className="">Board</span>
-                                <span className="">Task App</span>
-                            </div>
-                            <div className="flex flex-col text-xs gap-2 flex-1">
-                                <span className="">List</span>
-                                <span className="">To Do</span>
-                            </div>
+                    <section className="flex flex-col mt-8">
+                        <div className="text-base font-semibold mb-5">Recent Cards</div>
+                        <div className="flex flex-col gap-3">
+                            {cards.map((card) => {
+                                const { workspaceTitle, boardTitle, listTitle } = cardDetails(
+                                    workspaces,
+                                    boards,
+                                    lists,
+                                    card
+                                )
+                                return (
+                                    <DetailCard
+                                        key={card.id}
+                                        card={card}
+                                        workspaceTitle={workspaceTitle || ""}
+                                        boardTitle={boardTitle || ""}
+                                        listTitle={listTitle || ""}
+                                    />
+                                )
+                            })}
                         </div>
+                    </section>
+                </div>
+                <div className="flex flex-col w-1/3 bg-gray-100 rounded-md p-2">
+                    <div className="text-base font-semibold mb-2 ">Recent Activities</div>
+                    <div className="flex flex-col gap-2">
+                        {activities.map((activity) => {
+                            const { workspaceTitle } = activityDetails(activity, workspaces)
+                            return (
+                                <Activity
+                                    key={activity.id}
+                                    activity={activity}
+                                    workspaceTitle={workspaceTitle || ""}
+                                />
+                            )
+                        })}
                     </div>
                 </div>
-                <div className="w-1/3">list recent board</div>
-            </div>
+            </section>
         </section>
     )
 }

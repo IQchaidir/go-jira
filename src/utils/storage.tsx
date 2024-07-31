@@ -1,3 +1,4 @@
+import { activity } from "@/types/activity.type"
 import { board } from "@/types/board.type"
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
@@ -54,6 +55,39 @@ export const defaultCards = [
         id: 2,
         listId: 1,
         title: "interactive",
+    },
+]
+
+export const defaultActivities = [
+    {
+        id: 1,
+        workSpaceId: 1,
+        title: `Created board "Task App" `,
+    },
+    {
+        id: 2,
+        workSpaceId: 1,
+        title: `Created board "Board App" `,
+    },
+    {
+        id: 3,
+        workSpaceId: 1,
+        title: `Created list "To Do" `,
+    },
+    {
+        id: 4,
+        workSpaceId: 1,
+        title: `Created list "Done" `,
+    },
+    {
+        id: 5,
+        workSpaceId: 1,
+        title: `Created card "homepage" `,
+    },
+    {
+        id: 6,
+        workSpaceId: 1,
+        title: `Created card "interactive" `,
     },
 ]
 
@@ -148,5 +182,22 @@ export function loadLists() {
         return JSON.parse(lists || "[]")
     } catch (error) {
         console.error("failed to load lists", error)
+    }
+}
+
+export function saveActivity(activity: activity[]) {
+    localStorage.setItem("activity", JSON.stringify(activity))
+}
+export function loadActivities() {
+    const activity = localStorage.getItem("activity")
+
+    if (!activity) {
+        saveActivity([])
+    }
+
+    try {
+        return JSON.parse(activity || "[]")
+    } catch (error) {
+        console.error("failed to load activity", error)
     }
 }
