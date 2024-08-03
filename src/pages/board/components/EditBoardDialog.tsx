@@ -7,20 +7,30 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { createCard } from "@/utils/cards"
-import { Plus } from "lucide-react"
+import { editBoard } from "@/utils/boards"
+import { EditIcon } from "lucide-react"
 import { useState } from "react"
 
-export function CreateCardDialog({ onCreate, listId }: { onCreate: () => void; listId: number }) {
-    const [title, setTitle] = useState<string>("")
+export function EditBoardDialog({
+    onEdit,
+    currentTitle,
+    id,
+    workspaceId,
+}: {
+    onEdit: () => void
+    currentTitle: string
+    id: number
+    workspaceId: number
+}) {
+    const [title, setTitle] = useState<string>(currentTitle)
     const [open, setOpen] = useState<boolean>(false)
 
     function handleSubmit() {
         if (title === "") {
             return alert("title cannot be empty")
         }
-        createCard(title, listId)
-        onCreate()
+        editBoard(id, title, workspaceId)
+        onEdit()
         setTitle("")
         setOpen(false)
     }
@@ -32,21 +42,18 @@ export function CreateCardDialog({ onCreate, listId }: { onCreate: () => void; l
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <div className="flex gap-2 items-center text-gray-500 cursor-pointer">
-                    <Plus className="w-5 h-5" />
-                    Add a card
-                </div>
+                <EditIcon className="cursor-pointer" />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create List</DialogTitle>
+                    <DialogTitle>Edit Board</DialogTitle>
                 </DialogHeader>
                 <div>
                     <input
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Card title...."
+                        placeholder="Board title...."
                         className="w-full border border-black rounded-md p-1 "
                     />
                 </div>
@@ -55,7 +62,7 @@ export function CreateCardDialog({ onCreate, listId }: { onCreate: () => void; l
                         Cancel
                     </Button>
                     <Button type="submit" onClick={handleSubmit}>
-                        Create!
+                        Edit!
                     </Button>
                 </DialogFooter>
             </DialogContent>

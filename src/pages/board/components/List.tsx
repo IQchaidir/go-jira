@@ -1,23 +1,26 @@
-import CreateCardDialog from "@/pages/board/components/CreateCardDialog"
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable"
-import { Ellipsis } from "lucide-react"
 import { useState } from "react"
 import { CSS } from "@dnd-kit/utilities"
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
 import Card from "./Card"
 import { createPortal } from "react-dom"
 import { saveCard } from "@/utils/storage"
+import { EditlistDialog } from "./EditListDialog"
+import { DeleteListDialog } from "./DeleteListDialog"
+import { CreateCardDialog } from "./CreateCardDialog"
 
 const List = ({
     list,
     cards,
     setCards,
+    renderPage,
 }: {
     list: list
     cards: card[]
     setCards: React.Dispatch<React.SetStateAction<card[]>>
+    renderPage: () => void
 }) => {
     const [activeCard, setActiveCard] = useState<card | null>(null)
 
@@ -62,10 +65,23 @@ const List = ({
         <div
             ref={setNodeRef}
             style={style}
-            className="relative flex flex-col rounded-md py-1 px-2 h-[400px] bg-gray-100 gap-2 font-semibold "
+            className="relative flex flex-col rounded-md py-1 px-2 h-[400px] bg-gray-100 gap-2 font-semibold overflow-auto"
         >
-            <div {...attributes} {...listeners} className="flex justify-between cursor-pointer">
-                <span>{list.title}</span> <Ellipsis />
+            <div className="flex justify-between cursor-pointer items-center">
+                <span {...attributes} {...listeners} className="flex-1">
+                    {list.title}
+                </span>
+                {!isDragging && (
+                    <div className="flex gap-2">
+                        <EditlistDialog
+                            id={list.id}
+                            boardId={list.boardId}
+                            currentTitle={list.title}
+                            onEdit={renderPage}
+                        />
+                        <DeleteListDialog id={list.id} renderPage={renderPage} />
+                    </div>
+                )}
             </div>
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                 <SortableContext items={cards.map((card) => card.id)}>
@@ -76,7 +92,7 @@ const List = ({
                     document.body
                 )}
             </DndContext>
-            <CreateCardDialog />
+            <CreateCardDialog listId={list.id} onCreate={renderPage} />
 
             {isDragging && <div className="absolute inset-0 bg-white"></div>}
         </div>

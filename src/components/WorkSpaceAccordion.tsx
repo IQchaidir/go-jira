@@ -5,7 +5,13 @@ import { Link } from "react-router-dom"
 import { EditWorkspaceDialog } from "./EditWorkspaceDialog"
 import { DeleteWorkspaceDialog } from "./DeleteWorkspaceDialog"
 
-export function WorkspaceAccordion({ workspace, onEdit }: { workspace: workspace; onEdit: () => void }) {
+export function WorkspaceAccordion({
+    workspace,
+    refreshData,
+}: {
+    workspace: workspace
+    refreshData: () => void
+}) {
     return (
         <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
@@ -34,8 +40,12 @@ export function WorkspaceAccordion({ workspace, onEdit }: { workspace: workspace
                             <span className="text-base">Activity</span>
                         </div>
                     </Link>
-                    <EditWorkspaceDialog currentTitle={workspace.title} id={workspace.id} onEdit={onEdit} />
-                    <DeleteWorkspaceDialog id={workspace.id} onDelete={onEdit} />
+                    <EditWorkspaceDialog
+                        currentTitle={workspace.title}
+                        id={workspace.id}
+                        onEdit={refreshData}
+                    />
+                    <DeleteWorkspaceDialog id={workspace.id} onDelete={refreshData} />
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

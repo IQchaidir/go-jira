@@ -1,11 +1,12 @@
 import { Building, Clipboard } from "lucide-react"
-import CreateBoardDialog from "./components/CreateBoardDialog"
+
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { workspace } from "@/types/workspace.type"
 import { board } from "@/types/board.type"
 import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
 import { filterBoardByWokrspace } from "@/utils/filter"
+import { CreateBoardDialog } from "./components/CreateBoardDialog"
 
 const WorkSpacePage = () => {
     const { workspaceId } = useParams()
@@ -26,6 +27,10 @@ const WorkSpacePage = () => {
         saveBoard(boardsToSave)
         setBoards(filterBoardByWokrspace(Number(workspaceId)))
     }, [workspaceId])
+
+    function onCreate() {
+        if (workspace) setBoards(filterBoardByWokrspace(workspace.id))
+    }
 
     return (
         <section className="flex flex-col mt-10 px-7 w-full">
@@ -48,7 +53,7 @@ const WorkSpacePage = () => {
                         </div>
                     </Link>
                 ))}
-                <CreateBoardDialog />
+                {workspace && <CreateBoardDialog onCreate={onCreate} workspaceId={workspace?.id} />}
             </div>
         </section>
     )

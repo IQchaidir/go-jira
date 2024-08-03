@@ -1,5 +1,6 @@
 import { workspace } from "@/types/workspace.type"
-import { loadWorkspaces, saveWorkspace } from "./storage"
+import { loadBoards, loadWorkspaces, saveWorkspace } from "./storage"
+import { deleteBoard, deleteBoardByWorkspaceId } from "./boards"
 
 export function createWorkspace(title: string) {
     const workspaces = loadWorkspaces()
@@ -33,5 +34,6 @@ export function editWorkspace(id: number, title: string) {
 export function deleteWorkspace(id: number) {
     const workspaces = loadWorkspaces()
     const updateWorkspaces = workspaces.filter((workspace: workspace) => workspace.id !== id)
+    deleteBoardByWorkspaceId(id)
     saveWorkspace(updateWorkspaces)
 }

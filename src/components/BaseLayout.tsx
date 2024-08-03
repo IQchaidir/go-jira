@@ -4,9 +4,9 @@ import Sidebar from "./Sidebar"
 
 const BaseLayout = () => {
     return (
-        <div className="h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex h-full">
+            <main className="flex min-h-screen">
                 <Sidebar />
                 <Outlet />
             </main>

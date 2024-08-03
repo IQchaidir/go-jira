@@ -7,11 +7,30 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { createBoard } from "@/utils/boards"
+import { useState } from "react"
 
-const CreateBoardDialog = () => {
+export function CreateBoardDialog({ onCreate, workspaceId }: { onCreate: () => void; workspaceId: number }) {
+    const [title, setTitle] = useState<string>("")
+    const [open, setOpen] = useState<boolean>(false)
+
+    function handleSubmit() {
+        if (title === "") {
+            return alert("title cannot be empty")
+        }
+        createBoard(title, workspaceId)
+        onCreate()
+        setTitle("")
+        setOpen(false)
+    }
+
+    function handleClose() {
+        setOpen(false)
+    }
+
     return (
-        <Dialog>
-            <DialogTrigger asChild>
+        <Dialog open={open}>
+            <DialogTrigger asChild onClick={() => setOpen(true)}>
                 <div className="flex rounded-md h-32 bg-gray-100 items-center justify-center font-semibold transition-transform duration-300 transform hover:scale-105 cursor-pointer">
                     Create New Board
                 </div>
@@ -23,16 +42,21 @@ const CreateBoardDialog = () => {
                 <div>
                     <input
                         type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         placeholder="Board title...."
                         className="w-full border border-black rounded-md p-1 "
                     />
                 </div>
                 <DialogFooter>
-                    <Button type="submit">Create!</Button>
+                    <Button variant={"destructive"} onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" onClick={handleSubmit}>
+                        Create!
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     )
 }
-
-export default CreateBoardDialog

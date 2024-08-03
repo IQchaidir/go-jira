@@ -91,7 +91,7 @@ const Dashboard = () => {
         <section className="flex flex-col  mt-10 px-7 w-full">
             <h1 className="text-2xl font-semibold gap-2 ">Welcome Back!</h1>
             <hr className="mt-3 mb-5 border" />
-            <section className="flex gap-4">
+            <section className="flex gap-4 items-start">
                 <div className="flex flex-col w-2/3">
                     <div className="grid grid-cols-3 gap-3">
                         {items.map((item) => (
@@ -109,7 +109,7 @@ const Dashboard = () => {
                     </div>
                     <section className="flex flex-col mt-8">
                         <div className="text-base font-semibold mb-5">Recent Cards</div>
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-3 mb-5">
                             {cards.map((card) => {
                                 const { workspaceTitle, boardTitle, listTitle } = cardDetails(
                                     workspaces,
