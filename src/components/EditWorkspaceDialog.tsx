@@ -7,20 +7,28 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { createWorkspace } from "@/utils/workspace"
-import { Plus } from "lucide-react"
+import { editWorkspace } from "@/utils/workspace"
+import { EditIcon } from "lucide-react"
 import { useState } from "react"
 
-export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
-    const [title, setTitle] = useState<string>("")
+export function EditWorkspaceDialog({
+    onEdit,
+    currentTitle,
+    id,
+}: {
+    onEdit: () => void
+    currentTitle: string
+    id: number
+}) {
+    const [title, setTitle] = useState<string>(currentTitle)
     const [open, setOpen] = useState<boolean>(false)
 
     function handleSubmit() {
         if (title === "") {
             return alert("title cannot be empty")
         }
-        createWorkspace(title)
-        onCreate()
+        editWorkspace(id, title)
+        onEdit()
         setTitle("")
         setOpen(false)
     }
@@ -32,11 +40,16 @@ export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <Plus className="cursor-pointer" />
+                <div className="flex gap-1 items-center cursor-pointer ml-4 mt-3">
+                    <div className="p-1 rounded-md text-gray-500">
+                        <EditIcon className="w-5 h-5" />
+                    </div>
+                    <span className="text-base">Edit Workspace</span>
+                </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create Workspace</DialogTitle>
+                    <DialogTitle>Edit Workspace</DialogTitle>
                 </DialogHeader>
                 <div>
                     <input
@@ -52,7 +65,7 @@ export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
                         Cancel
                     </Button>
                     <Button type="submit" onClick={handleSubmit}>
-                        Create!
+                        Edit!
                     </Button>
                 </DialogFooter>
             </DialogContent>

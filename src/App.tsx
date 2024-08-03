@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom"
 import BaseLayout from "./components/BaseLayout"
 import Dashboard from "./components/Dashboard"
-import WorkSpace from "./components/WorkSpace"
-import ActivityPage from "./components/ActivityPage"
+import WorkSpace from "./pages/workspace/WorkSpacePage"
 import BoardPage from "./pages/board/BoardPage"
+import ActivityPage from "./pages/activity/ActivityPage"
 
 function App() {
     return (

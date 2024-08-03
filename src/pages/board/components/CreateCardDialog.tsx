@@ -13,7 +13,7 @@ const CreateCardDialog = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <div className="flex gap-2 items-center text-gray-500 cursor-pointer mt-5">
+                <div className="flex gap-2 items-center text-gray-500 cursor-pointer">
                     <Plus className="w-5 h-5" />
                     Add a card
                 </div>

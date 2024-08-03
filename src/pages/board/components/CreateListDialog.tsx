@@ -13,7 +13,7 @@ const CreateListDialog = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <div className="flex rounded-md p-2 h-10  items-center bg-gray-100 cursor-pointer gap-2">
+                <div className="flex rounded-md p-2 h-10 font-semibold  items-center bg-gray-100 cursor-pointer gap-2">
                     <Plus className="w-5 h-5" />
                     <span>Add a list</span>
                 </div>

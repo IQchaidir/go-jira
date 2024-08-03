@@ -1,4 +1,4 @@
-import CreateCardDialog from "@/components/CreateCardDialog"
+import CreateCardDialog from "@/pages/board/components/CreateCardDialog"
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable"

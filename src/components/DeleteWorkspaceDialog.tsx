@@ -7,22 +7,20 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { createWorkspace } from "@/utils/workspace"
-import { Plus } from "lucide-react"
+import { deleteWorkspace } from "@/utils/workspace"
+import { TrashIcon } from "lucide-react"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
-    const [title, setTitle] = useState<string>("")
+export function DeleteWorkspaceDialog({ onDelete, id }: { onDelete: () => void; id: number }) {
     const [open, setOpen] = useState<boolean>(false)
+    const navigate = useNavigate()
 
     function handleSubmit() {
-        if (title === "") {
-            return alert("title cannot be empty")
-        }
-        createWorkspace(title)
-        onCreate()
-        setTitle("")
+        deleteWorkspace(id)
+        onDelete()
         setOpen(false)
+        navigate("/")
     }
 
     function handleClose() {
@@ -32,27 +30,24 @@ export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <Plus className="cursor-pointer" />
+                <div className="flex gap-1 items-center cursor-pointer ml-4 mt-3 text-red-500">
+                    <div className="p-1 rounded-md ">
+                        <TrashIcon className="w-5 h-5" />
+                    </div>
+                    <span className="text-base">Delete Workspace</span>
+                </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create Workspace</DialogTitle>
+                    <DialogTitle>Are you sure delete this workspace?</DialogTitle>
                 </DialogHeader>
-                <div>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Workspace title...."
-                        className="w-full border border-black rounded-md p-1 "
-                    />
-                </div>
+                <div></div>
                 <DialogFooter>
                     <Button variant={"destructive"} onClick={handleClose}>
                         Cancel
                     </Button>
                     <Button type="submit" onClick={handleSubmit}>
-                        Create!
+                        Delete!
                     </Button>
                 </DialogFooter>
             </DialogContent>

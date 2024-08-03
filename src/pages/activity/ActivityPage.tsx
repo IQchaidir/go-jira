@@ -1,3 +1,4 @@
+import Activity from "@/components/Activity"
 import { activity } from "@/types/activity.type"
 import { workspace } from "@/types/workspace.type"
 import { filterActivityByWorkspace } from "@/utils/filter"
@@ -5,7 +6,6 @@ import { loadWorkspaceById } from "@/utils/storage"
 import { Building } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import Activity from "./Activity"
 
 const ActivityPage = () => {
     const { workspaceId } = useParams()
@@ -30,7 +30,7 @@ const ActivityPage = () => {
             </div>
             <hr className="mt-3 mb-5 border" />
             {activities.map((activity) => (
-                <Activity key={activity.id} activity={activity} workspaceTitle={workspace?.title || ""} />
+                <Activity key={activity.id} activity={activity} workspaceTitle="" />
             ))}
         </section>
     )

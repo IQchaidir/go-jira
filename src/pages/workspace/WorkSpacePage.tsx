@@ -1,5 +1,5 @@
 import { Building, Clipboard } from "lucide-react"
-import CreateBoardDialog from "./CreateBoardDialog"
+import CreateBoardDialog from "./components/CreateBoardDialog"
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { workspace } from "@/types/workspace.type"
@@ -7,7 +7,7 @@ import { board } from "@/types/board.type"
 import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
 import { filterBoardByWokrspace } from "@/utils/filter"
 
-const WorkSpace = () => {
+const WorkSpacePage = () => {
     const { workspaceId } = useParams()
     const [boards, setBoards] = useState<board[]>([])
     const [workspace, setWorkspace] = useState<workspace>()
@@ -54,4 +54,4 @@ const WorkSpace = () => {
     )
 }
 
-export default WorkSpace
+export default WorkSpacePage

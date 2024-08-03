@@ -21,10 +21,14 @@ const Sidebar = () => {
         setWorkspaces(loadWorkspaces())
     }, [])
 
+    function onCreate() {
+        setWorkspaces(loadWorkspaces)
+    }
+
     return (
         <aside className="hidden md:flex flex-col w-1/4 shadow-md pl-7 pr-3 text-lg font-semibold">
             <div className="flex justify-between mt-11">
-                <span>Workspaces</span> <CreateWorkspaceDialog />
+                <span>Workspaces</span> <CreateWorkspaceDialog onCreate={onCreate} />
             </div>
             <Link to={`/`}>
                 <div className="flex gap-2 items-center cursor-pointer mt-2 mb-2">
@@ -35,7 +39,7 @@ const Sidebar = () => {
                 </div>
             </Link>
             {workspaces.map((workspace) => (
-                <WorkspaceAccordion key={workspace.id} workspace={workspace} />
+                <WorkspaceAccordion key={workspace.id} workspace={workspace} onEdit={onCreate} />
             ))}
         </aside>
     )
