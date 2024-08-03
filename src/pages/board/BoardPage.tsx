@@ -2,8 +2,8 @@ import { Building } from "lucide-react"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import type { board } from "@/types/board.type"
-import { loadBoardById, loadWorkspaceById } from "@/utils/storage"
-import { filterlistByBoard } from "@/utils/filter"
+import { loadBoardById, loadCards, loadWorkspaceById, saveLists } from "@/utils/storage"
+import { filterlistByBoard, getCardsByListId } from "@/utils/filter"
 import { workspace } from "@/types/workspace.type"
 import { list } from "@/types/list.type"
 import List from "./components/List"
@@ -11,12 +11,15 @@ import CreateListDialog from "./components/CreateListDialog"
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext } from "@dnd-kit/sortable"
 import { createPortal } from "react-dom"
+import { card } from "@/types/card.type"
+import Card from "./components/Card"
 
 const BoardPage = () => {
     const { boardId } = useParams()
     const [workspace, setWorkspace] = useState<workspace>()
     const [board, setBoard] = useState<board>()
     const [lists, setLists] = useState<list[]>([])
+    const [cards, setCards] = useState<card[]>([])
     const [activeList, setActiveList] = useState<list | null>(null)
 
     function handleDragStart(event: DragStartEvent) {
@@ -37,8 +40,9 @@ const BoardPage = () => {
         setLists((lists) => {
             const activeListIndex = lists.findIndex((list) => list.id === activeId)
             const overListIndex = lists.findIndex((list) => list.id === overId)
-
-            return arrayMove(lists, activeListIndex, overListIndex)
+            const newList = arrayMove(lists, activeListIndex, overListIndex)
+            saveLists(newList)
+            return newList
         })
     }
 
@@ -50,6 +54,7 @@ const BoardPage = () => {
             const currentWorkspace = loadWorkspaceById(Number(currentBoard.workspaceId))
             setWorkspace(currentWorkspace)
             setLists(filterlistByBoard(Number(boardId)))
+            setCards(loadCards())
         }
     }, [boardId])
 
@@ -66,14 +71,27 @@ const BoardPage = () => {
                 <div className="grid  md:grid-cols-4 gap-4  overflow-auto">
                     <SortableContext items={lists.map((list) => list.id)}>
                         {lists.map((list) => (
-                            <List key={list.id} list={list} />
+                            <List
+                                key={list.id}
+                                list={list}
+                                cards={getCardsByListId(list.id, cards)}
+                                setCards={setCards}
+                            />
                         ))}
                     </SortableContext>
                     <CreateListDialog />
                 </div>
 
                 {createPortal(
-                    <DragOverlay>{activeList && <List list={activeList} />}</DragOverlay>,
+                    <DragOverlay>
+                        {activeList && (
+                            <List
+                                list={activeList}
+                                cards={getCardsByListId(activeList.id, cards)}
+                                setCards={setCards}
+                            />
+                        )}
+                    </DragOverlay>,
                     document.body
                 )}
             </DndContext>

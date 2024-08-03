@@ -1,17 +1,24 @@
 import CreateCardDialog from "@/components/CreateCardDialog"
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
-import { filterCardByList } from "@/utils/filter"
 import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable"
 import { Ellipsis } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CSS } from "@dnd-kit/utilities"
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
 import Card from "./Card"
 import { createPortal } from "react-dom"
+import { saveCard } from "@/utils/storage"
 
-const List = ({ list }: { list: list }) => {
-    const [cards, setCards] = useState<card[]>([])
+const List = ({
+    list,
+    cards,
+    setCards,
+}: {
+    list: list
+    cards: card[]
+    setCards: React.Dispatch<React.SetStateAction<card[]>>
+}) => {
     const [activeCard, setActiveCard] = useState<card | null>(null)
 
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
@@ -27,12 +34,6 @@ const List = ({ list }: { list: list }) => {
         transform: CSS.Transform.toString(transform),
     }
 
-    useEffect(() => {
-        if (list) {
-            setCards(filterCardByList(list.id))
-        }
-    }, [])
-
     function handleDragStart(event: DragStartEvent) {
         if (event.active.data.current?.type === "card") {
             setActiveCard(event.active.data.current.card)
@@ -47,18 +48,13 @@ const List = ({ list }: { list: list }) => {
         }
         const activeId = active.id
         const overId = over.id
-        const activeListId = active.data.current?.list.id
-        const overListId = over.data.current?.list.id
-
-        if (activeListId !== overListId) {
-            console.log(`Card moved from list ${activeListId} to list ${overListId}`)
-        }
 
         setCards((cards) => {
             const activeCardIndex = cards.findIndex((card) => card.id === activeId)
             const overCardIndex = cards.findIndex((card) => card.id === overId)
-
-            return arrayMove(cards, activeCardIndex, overCardIndex)
+            const newCard = arrayMove(cards, activeCardIndex, overCardIndex)
+            saveCard(newCard)
+            return newCard
         })
     }
 
@@ -73,12 +69,10 @@ const List = ({ list }: { list: list }) => {
             </div>
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                 <SortableContext items={cards.map((card) => card.id)}>
-                    {cards.map((card) => (
-                        <Card key={card.id} card={card} list={list} />
-                    ))}
+                    {!isDragging && cards.map((card) => <Card key={card.id} card={card} />)}
                 </SortableContext>
                 {createPortal(
-                    <DragOverlay>{activeCard && <Card card={activeCard} list={list} />}</DragOverlay>,
+                    <DragOverlay>{activeCard && <Card card={activeCard} />}</DragOverlay>,
                     document.body
                 )}
             </DndContext>

@@ -39,3 +39,7 @@ export function filterActivityByWorkspace(workspaceId: number) {
 
     return filterActivity
 }
+
+export const getCardsByListId = (listId: number, cards: card[]) => {
+    return cards.filter((card) => card.listId === listId)
+}
