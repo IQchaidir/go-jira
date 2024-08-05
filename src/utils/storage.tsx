@@ -61,32 +61,32 @@ export const defaultCards = [
 export const defaultActivities = [
     {
         id: 1,
-        workSpaceId: 1,
+        workspaceId: 1,
         title: `Created board "Task App" `,
     },
     {
         id: 2,
-        workSpaceId: 1,
+        workspaceId: 1,
         title: `Created board "Board App" `,
     },
     {
         id: 3,
-        workSpaceId: 1,
+        workspaceId: 1,
         title: `Created list "To Do" `,
     },
     {
         id: 4,
-        workSpaceId: 1,
+        workspaceId: 1,
         title: `Created list "Done" `,
     },
     {
         id: 5,
-        workSpaceId: 1,
+        workspaceId: 1,
         title: `Created card "homepage" `,
     },
     {
         id: 6,
-        workSpaceId: 1,
+        workspaceId: 1,
         title: `Created card "interactive" `,
     },
 ]
@@ -186,10 +186,10 @@ export function loadLists() {
 }
 
 export function saveActivity(activity: activity[]) {
-    localStorage.setItem("activity", JSON.stringify(activity))
+    localStorage.setItem("activities", JSON.stringify(activity))
 }
 export function loadActivities() {
-    const activity = localStorage.getItem("activity")
+    const activity = localStorage.getItem("activities")
 
     if (!activity) {
         saveActivity([])

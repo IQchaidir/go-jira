@@ -22,7 +22,6 @@ import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 import DetailCard from "./DetailCard"
-
 import { activity as typeActivity } from "@/types/activity.type"
 import Activity from "./Activity"
 
@@ -135,19 +134,7 @@ const Dashboard = () => {
                     </section>
                 </div>
                 <div className="flex flex-col w-1/3 bg-gray-100 rounded-md p-2">
-                    <div className="text-base font-semibold mb-2 ">Recent Activities</div>
-                    <div className="flex flex-col gap-2">
-                        {activities.slice(0, 10).map((activity) => {
-                            const { workspaceTitle } = activityDetails(activity, workspaces)
-                            return (
-                                <Activity
-                                    key={activity.id}
-                                    activity={activity}
-                                    workspaceTitle={workspaceTitle || ""}
-                                />
-                            )
-                        })}
-                    </div>
+                    <div className="text-base font-semibold mb-2 ">Recent Boards</div>
                 </div>
             </section>
         </section>

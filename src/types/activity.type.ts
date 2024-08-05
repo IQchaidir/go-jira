@@ -1,5 +1,5 @@
 export interface activity {
     id: number
-    workSpaceId: number
+    workspaceId: number | null
     title: string
 }

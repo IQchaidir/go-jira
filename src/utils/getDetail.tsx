@@ -24,7 +24,7 @@ export function cardDetails(workspaces: workspace[], boards: board[], lists: lis
 
 export function activityDetails(activity: activity, workspaces: workspace[]) {
     const workspace = workspaces.find((workspace) => {
-        return workspace.id === activity.workSpaceId
+        return workspace.id === activity.workspaceId
     })
 
     return {

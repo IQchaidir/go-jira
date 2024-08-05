@@ -1,6 +1,7 @@
 import { workspace } from "@/types/workspace.type"
-import { loadBoards, loadWorkspaces, saveWorkspace } from "./storage"
-import { deleteBoard, deleteBoardByWorkspaceId } from "./boards"
+import { loadWorkspaces, saveWorkspace } from "./storage"
+import { deleteBoardByWorkspaceId } from "./boards"
+import { createActivity } from "./activity"
 
 export function createWorkspace(title: string) {
     const workspaces = loadWorkspaces()
@@ -12,6 +13,8 @@ export function createWorkspace(title: string) {
 
     const updateWorkspaces = [...workspaces, newWorkspace]
     saveWorkspace(updateWorkspaces)
+
+    createActivity(newWorkspace.id, "Create", "workspace", title)
 }
 
 export function editWorkspace(id: number, title: string) {
@@ -29,10 +32,14 @@ export function editWorkspace(id: number, title: string) {
     })
 
     saveWorkspace(updateWorkspaces)
+
+    createActivity(id, "Edit Title", "workspace", title)
 }
 
 export function deleteWorkspace(id: number) {
     const workspaces = loadWorkspaces()
+    const workspace = workspaces.find((workspace: workspace) => workspace.id === id)
+    createActivity(null, "Delete", "workspace", workspace.title)
     const updateWorkspaces = workspaces.filter((workspace: workspace) => workspace.id !== id)
     deleteBoardByWorkspaceId(id)
     saveWorkspace(updateWorkspaces)

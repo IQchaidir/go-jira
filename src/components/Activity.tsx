@@ -9,7 +9,7 @@ const Activity = ({ activity, workspaceTitle }: { activity: activity; workspaceT
             </div>
             <div className="flex flex-col">
                 <span className="text-sm">
-                    {activity.title} - {workspaceTitle}
+                    {activity.title} {workspaceTitle && <> - {workspaceTitle}</>}
                 </span>
                 <span className="text-xs">Nov 6,2023 at 12:12 AM</span>
             </div>
