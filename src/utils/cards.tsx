@@ -40,6 +40,6 @@ export function deleteCard(id: number) {
 
 export function deleteCardByListId(ListId: number) {
     const cards = loadCards()
-    const updatecards = cards.filter((card: card) => card.id !== ListId)
+    const updatecards = cards.filter((card: card) => card.listId !== ListId)
     saveCard(updatecards)
 }

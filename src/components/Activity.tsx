@@ -3,7 +3,7 @@ import { Activity as IconActivity } from "lucide-react"
 
 const Activity = ({ activity, workspaceTitle }: { activity: activity; workspaceTitle: string }) => {
     return (
-        <div className="flex gap-1 items-center cursor-pointer mb-3">
+        <div className="flex gap-1 items-center mb-3">
             <div className="p-1 rounded-md text-gray-500">
                 <IconActivity className="w-5 h-5" />
             </div>

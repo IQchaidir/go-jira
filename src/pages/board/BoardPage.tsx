@@ -14,6 +14,7 @@ import { card } from "@/types/card.type"
 import { EditBoardDialog } from "./components/EditBoardDialog"
 import { DeleteBoardDialog } from "./components/DeleteBoardDialog"
 import { CreateListDialog } from "./components/CreateListDialog"
+import { editBoard } from "@/utils/boards"
 
 const BoardPage = () => {
     const { boardId } = useParams()
@@ -22,6 +23,8 @@ const BoardPage = () => {
     const [lists, setLists] = useState<list[]>([])
     const [cards, setCards] = useState<card[]>([])
     const [activeList, setActiveList] = useState<list | null>(null)
+    const [title, setTitle] = useState("")
+    const [isEdit, setIsEdit] = useState<boolean>(false)
 
     function renderPage() {
         if (board) setBoard(loadBoardById(board.id))
@@ -57,6 +60,7 @@ const BoardPage = () => {
         if (boardId) {
             const currentBoard = loadBoardById(Number(boardId))
             setBoard(currentBoard)
+            setTitle(currentBoard.title)
 
             const currentWorkspace = loadWorkspaceById(Number(currentBoard.workspaceId))
             setWorkspace(currentWorkspace)
@@ -65,48 +69,67 @@ const BoardPage = () => {
         }
     }, [boardId])
 
+    function handleClick() {
+        setIsEdit(true)
+    }
+
+    function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setTitle(e.target.value)
+    }
+
+    function handleOnBlur() {
+        if (board && workspace) {
+            editBoard(board.id, title, workspace.id)
+            setIsEdit(false)
+        }
+    }
+
     return (
         <section className="flex flex-col mt-10 px-7 w-full">
-            <div className="flex items-center text-2xl font-semibold justify-between ">
+            <div className="flex items-center text-2xl font-semibold justify-between">
                 <div className="flex gap-2">
                     <div className="p-1 bg-purple-500 rounded-md text-white">
                         <Building className="w-8 h-8" />
                     </div>
-                    <span>{workspace?.title}</span> - <span>{board?.title}</span>
-                </div>
-
-                {board && workspace && (
-                    <div className="flex gap-5">
-                        <EditBoardDialog
-                            currentTitle={board.title}
-                            id={board.id}
-                            onEdit={renderPage}
-                            workspaceId={workspace.id}
+                    <span>{workspace?.title}</span> -
+                    {isEdit ? (
+                        <input
+                            className="flex h-full  focus:outline-none"
+                            type="text"
+                            value={title}
+                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
+                            autoFocus
                         />
-                        <DeleteBoardDialog id={board.id} workspaceId={workspace.id} />
-                    </div>
-                )}
+                    ) : (
+                        <span onClick={handleClick} className="cursor-pointer">
+                            {title}
+                        </span>
+                    )}
+                </div>
+                {board && workspace && <DeleteBoardDialog id={board.id} workspaceId={workspace.id} />}
             </div>
             <hr className="mt-3 mb-5 border" />
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                 <div className="grid  md:grid-cols-4 gap-4 ">
                     <SortableContext items={lists.map((list) => list.id)}>
-                        {lists.map((list) => (
-                            <List
-                                key={list.id}
-                                list={list}
-                                cards={getCardsByListId(list.id, cards)}
-                                setCards={setCards}
-                                renderPage={renderPage}
-                            />
-                        ))}
+                        {board &&
+                            lists.map((list) => (
+                                <List
+                                    key={list.id}
+                                    list={list}
+                                    cards={getCardsByListId(list.id, cards)}
+                                    setCards={setCards}
+                                    renderPage={renderPage}
+                                />
+                            ))}
                     </SortableContext>
                     {board && <CreateListDialog boardId={board.id} onCreate={renderPage} />}
                 </div>
 
                 {createPortal(
                     <DragOverlay>
-                        {activeList && (
+                        {activeList && board && (
                             <List
                                 list={activeList}
                                 cards={getCardsByListId(activeList.id, cards)}

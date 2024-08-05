@@ -2,7 +2,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { workspace } from "@/types/workspace.type"
 import { Activity, Building, Clipboard } from "lucide-react"
 import { Link } from "react-router-dom"
-import { EditWorkspaceDialog } from "./EditWorkspaceDialog"
 import { DeleteWorkspaceDialog } from "./DeleteWorkspaceDialog"
 
 export function WorkspaceAccordion({
@@ -40,11 +39,6 @@ export function WorkspaceAccordion({
                             <span className="text-base">Activity</span>
                         </div>
                     </Link>
-                    <EditWorkspaceDialog
-                        currentTitle={workspace.title}
-                        id={workspace.id}
-                        onEdit={refreshData}
-                    />
                     <DeleteWorkspaceDialog id={workspace.id} onDelete={refreshData} />
                 </AccordionContent>
             </AccordionItem>

@@ -1,9 +1,14 @@
 import { card } from "@/types/card.type"
+import { editCard } from "@/utils/cards"
 
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
+import { useState } from "react"
+import { DeleteCardDialog } from "./DeleteCardDIalog"
 
-const Card = ({ card }: { card: card }) => {
+const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
+    const [title, setTitle] = useState(card.title)
+    const [isEdit, setIsEdit] = useState<boolean>(false)
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: card.id,
         data: {
@@ -17,18 +22,46 @@ const Card = ({ card }: { card: card }) => {
         transform: CSS.Transform.toString(transform),
     }
 
-    return (
-        <div className="relative flex flex-col gap-2">
-            <div
-                ref={setNodeRef}
-                style={style}
-                {...attributes}
-                {...listeners}
-                className="bg-white p-1 rounded-md font-semibold"
-            >
-                {card.title}
+    function handleClick() {
+        setIsEdit(true)
+    }
+
+    function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setTitle(e.target.value)
+    }
+
+    function handleOnBlur() {
+        editCard(card.id, title, card.listId)
+        setIsEdit(false)
+    }
+
+    if (isDragging)
+        return (
+            <div ref={setNodeRef} style={style} className=" flex w-full bg-white rounded-md">
+                <div className=" p-1 font-semibold text-white">{card.title}</div>
+                <div {...attributes} {...listeners} className="h-full flex-1"></div>
             </div>
-            {isDragging && <div className="absolute inset-0 rounded-md bg-white"></div>}
+        )
+
+    return (
+        <div ref={setNodeRef} style={style} className=" flex w-full bg-white rounded-md items-center">
+            <div onClick={handleClick} className=" p-1 font-semibold">
+                {isEdit ? (
+                    <input
+                        className="  focus:outline-none"
+                        style={{ width: `${title.length + 1}ch` }}
+                        type="text"
+                        value={title}
+                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
+                        autoFocus
+                    />
+                ) : (
+                    <>{card.title}</>
+                )}
+            </div>
+            <div {...attributes} {...listeners} className="h-full flex-1"></div>
+            <DeleteCardDialog id={card.id} renderPage={renderPage} />
         </div>
     )
 }

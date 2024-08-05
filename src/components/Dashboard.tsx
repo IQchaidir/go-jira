@@ -107,33 +107,37 @@ const Dashboard = () => {
                             </div>
                         ))}
                     </div>
-                    <section className="flex flex-col mt-8">
-                        <div className="text-base font-semibold mb-5">Recent Cards</div>
+                    <section className="flex flex-col mt-3">
+                        <div className="text-base font-semibold mb-2">Recent Cards</div>
                         <div className="flex flex-col gap-3 mb-5">
-                            {cards.map((card) => {
-                                const { workspaceTitle, boardTitle, listTitle } = cardDetails(
-                                    workspaces,
-                                    boards,
-                                    lists,
-                                    card
-                                )
-                                return (
-                                    <DetailCard
-                                        key={card.id}
-                                        card={card}
-                                        workspaceTitle={workspaceTitle || ""}
-                                        boardTitle={boardTitle || ""}
-                                        listTitle={listTitle || ""}
-                                    />
-                                )
-                            })}
+                            {cards.length === 0 ? (
+                                <p>No card have been created yet.</p>
+                            ) : (
+                                cards.slice(0, 10).map((card) => {
+                                    const { workspaceTitle, boardTitle, listTitle } = cardDetails(
+                                        workspaces,
+                                        boards,
+                                        lists,
+                                        card
+                                    )
+                                    return (
+                                        <DetailCard
+                                            key={card.id}
+                                            card={card}
+                                            workspaceTitle={workspaceTitle || ""}
+                                            boardTitle={boardTitle || ""}
+                                            listTitle={listTitle || ""}
+                                        />
+                                    )
+                                })
+                            )}
                         </div>
                     </section>
                 </div>
                 <div className="flex flex-col w-1/3 bg-gray-100 rounded-md p-2">
                     <div className="text-base font-semibold mb-2 ">Recent Activities</div>
                     <div className="flex flex-col gap-2">
-                        {activities.map((activity) => {
+                        {activities.slice(0, 10).map((activity) => {
                             const { workspaceTitle } = activityDetails(activity, workspaces)
                             return (
                                 <Activity

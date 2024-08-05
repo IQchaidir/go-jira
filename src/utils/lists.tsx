@@ -42,7 +42,7 @@ export function deleteList(id: number) {
 
 export function deleteListByBoardId(boardId: number) {
     const lists = loadLists()
-    const updatelists = lists.filter((list: list) => list.id !== boardId)
-    updatelists.map((list: list) => deleteCardByListId(list.id))
-    saveLists(updatelists)
+    lists.map((list: list) => deleteCardByListId(list.id))
+    const updateLists = lists.filter((list: list) => list.boardId !== boardId)
+    saveLists(updateLists)
 }

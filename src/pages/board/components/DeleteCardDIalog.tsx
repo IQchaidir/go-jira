@@ -7,20 +7,17 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { deleteWorkspace } from "@/utils/workspace"
+import { deleteCard } from "@/utils/cards"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
-export function DeleteWorkspaceDialog({ onDelete, id }: { onDelete: () => void; id: number }) {
+export function DeleteCardDialog({ id, renderPage }: { id: number; renderPage: () => void }) {
     const [open, setOpen] = useState<boolean>(false)
-    const navigate = useNavigate()
 
     function handleSubmit() {
-        deleteWorkspace(id)
-        onDelete()
+        deleteCard(id)
+        renderPage()
         setOpen(false)
-        navigate("/")
     }
 
     function handleClose() {
@@ -30,16 +27,11 @@ export function DeleteWorkspaceDialog({ onDelete, id }: { onDelete: () => void; 
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <div className="flex gap-1 items-center cursor-pointer ml-4 mt-3 text-red-500">
-                    <div className="p-1 rounded-md ">
-                        <TrashIcon className="w-5 h-5" />
-                    </div>
-                    <span className="text-base">Delete</span>
-                </div>
+                <TrashIcon className="text-red-500 cursor-pointer w-5 h-5" />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Are you sure delete this workspace?</DialogTitle>
+                    <DialogTitle>Are you sure delete this card?</DialogTitle>
                 </DialogHeader>
                 <div></div>
                 <DialogFooter>

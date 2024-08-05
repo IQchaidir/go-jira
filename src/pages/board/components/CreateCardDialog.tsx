@@ -32,8 +32,8 @@ export function CreateCardDialog({ onCreate, listId }: { onCreate: () => void; l
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <div className="flex gap-2 items-center text-gray-500 cursor-pointer">
-                    <Plus className="w-5 h-5" />
+                <div className="flex gap-2 items-center text-gray-500 bg-gray-100 cursor-pointer text-lg">
+                    <Plus className="w-7 h-7" />
                     Add a card
                 </div>
             </DialogTrigger>
