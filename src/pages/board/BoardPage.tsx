@@ -11,7 +11,6 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/
 import { arrayMove, SortableContext } from "@dnd-kit/sortable"
 import { createPortal } from "react-dom"
 import { card } from "@/types/card.type"
-import { EditBoardDialog } from "./components/EditBoardDialog"
 import { DeleteBoardDialog } from "./components/DeleteBoardDialog"
 import { CreateListDialog } from "./components/CreateListDialog"
 import { editBoard } from "@/utils/boards"

@@ -7,7 +7,6 @@ import { board } from "@/types/board.type"
 import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
 import { filterBoardByWokrspace } from "@/utils/filter"
 import { CreateBoardDialog } from "./components/CreateBoardDialog"
-import { title } from "process"
 import { editWorkspace } from "@/utils/workspace"
 
 const WorkSpacePage = () => {

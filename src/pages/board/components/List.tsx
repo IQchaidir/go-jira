@@ -7,11 +7,9 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/
 import Card from "./Card"
 import { createPortal } from "react-dom"
 import { saveCard } from "@/utils/storage"
-import { EditlistDialog } from "./EditListDialog"
 import { DeleteListDialog } from "./DeleteListDialog"
 import { CreateCardDialog } from "./CreateCardDialog"
 import { editList } from "@/utils/lists"
-import { board } from "@/types/board.type"
 
 const List = ({
     list,

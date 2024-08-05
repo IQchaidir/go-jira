@@ -1,6 +1,6 @@
 import { board } from "@/types/board.type"
 import { loadBoards, saveBoard } from "./storage"
-import { deleteList, deleteListByBoardId } from "./lists"
+import { deleteListByBoardId } from "./lists"
 
 export function createBoard(title: string, workspaceId: number) {
     const boards = loadBoards()
