@@ -55,7 +55,7 @@ const BoardPage = () => {
             if (JSON.stringify(lists) !== JSON.stringify(newList)) {
                 saveLists(newList)
                 toast({
-                    title: "Reordered lists!",
+                    title: "Rearrange lists!",
                 })
                 return newList
             }

@@ -93,7 +93,7 @@ const Dashboard = () => {
 
     if (searchQuery)
         return (
-            <section className="flex flex-col  mt-10 px-7 w-full">
+            <section className="flex flex-col  mt-10 px-3 md:px-7 w-full">
                 <h1 className="text-2xl font-semibold gap-2 ">Search result ({total(filterCards)})</h1>
                 <hr className="mt-3 mb-5 border" />
                 <div className="flex flex-col gap-3 mb-5">
@@ -124,11 +124,11 @@ const Dashboard = () => {
         )
 
     return (
-        <section className="flex flex-col  mt-10 px-7 w-full">
+        <section className="flex flex-col  mt-10 px-3 md:px-7 w-full">
             <h1 className="text-2xl font-semibold gap-2 ">Welcome Back!</h1>
             <hr className="mt-3 mb-5 border" />
-            <div className="flex gap-4 items-start">
-                <div className="flex flex-col w-2/3">
+            <div className="flex flex-col md:flex-row gap-4 items-start">
+                <div className="flex flex-col w-full md:w-2/3">
                     <section className="grid grid-cols-3 gap-3">
                         {items.map((item) => (
                             <div
@@ -177,7 +177,7 @@ const Dashboard = () => {
                         </div>
                     </section>
                 </div>
-                <div className="flex flex-col w-1/3 bg-gray-100 rounded-md p-2">
+                <div className="flex flex-col w-full md:w-1/3 bg-gray-100 rounded-md p-2">
                     <div className="text-base font-semibold mb-2 ">Recent Boards</div>
                 </div>
             </div>

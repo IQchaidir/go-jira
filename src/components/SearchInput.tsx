@@ -30,7 +30,7 @@ const SearchInput = () => {
             placeholder="Search card..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="p-1 border-black border-2 rounded-md"
+            className="p-1 border-black border rounded-md"
         />
     )
 }

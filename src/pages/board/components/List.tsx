@@ -63,7 +63,7 @@ const List = ({
             if (JSON.stringify(cards) !== JSON.stringify(newCard)) {
                 saveCard(newCard)
                 toast({
-                    title: "Reordered cards!",
+                    title: "Rearrange cards!",
                 })
                 return newCard
             }
