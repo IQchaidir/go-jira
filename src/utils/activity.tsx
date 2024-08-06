@@ -13,8 +13,15 @@ export function createActivity(
         id,
         workspaceId: workspaceId,
         title: `${action} ${itemType} "${itemTitle}"`,
+        createdAt: new Date(),
     }
     const updateActivities = [...activities, newActivity]
     saveActivity(updateActivities)
     console.log(loadActivities())
+}
+
+export function deleteActivity(workspaceId: number) {
+    const activities = loadActivities()
+    const updateActivities = activities.filter((activity: activity) => activity.workspaceId !== workspaceId)
+    saveActivity(updateActivities)
 }

@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react"
 import { Link } from "react-router-dom"
+import SearchInput from "./SearchInput"
 
 const Navbar = () => {
     return (
@@ -10,7 +11,7 @@ const Navbar = () => {
                     <img src="/logo.webp" width={180} />
                 </Link>
             </div>
-            <input type="search" placeholder="Search..." className="p-1 border-black border rounded-md" />
+            <SearchInput />
         </header>
     )
 }

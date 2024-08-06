@@ -76,7 +76,13 @@ const BoardPage = () => {
         setTitle(e.target.value)
     }
 
-    function handleOnBlur() {
+    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === "Enter") {
+            handleConfirm()
+        }
+    }
+
+    function handleConfirm() {
         if (board && workspace) {
             editBoard(board.id, title, workspace.id)
             setIsEdit(false)
@@ -97,13 +103,12 @@ const BoardPage = () => {
                             type="text"
                             value={title}
                             onChange={handleOnChange}
-                            onBlur={handleOnBlur}
+                            onBlur={handleConfirm}
+                            onKeyDown={handleOnKeyDown}
                             autoFocus
                         />
                     ) : (
-                        <span onClick={handleClick} className="cursor-pointer">
-                            {title}
-                        </span>
+                        <span onClick={handleClick}>{title}</span>
                     )}
                 </div>
                 {board && workspace && <DeleteBoardDialog id={board.id} workspaceId={workspace.id} />}

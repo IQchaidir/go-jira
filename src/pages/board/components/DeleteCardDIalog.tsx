@@ -27,7 +27,7 @@ export function DeleteCardDialog({ id, renderPage }: { id: number; renderPage: (
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <TrashIcon className="text-red-500 cursor-pointer w-5 h-5" />
+                <TrashIcon className="text-red-500 cursor-pointer w-5 h-5 pr-1" />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

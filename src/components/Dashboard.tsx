@@ -19,12 +19,17 @@ import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 import DetailCard from "./DetailCard"
+import { Link, useLocation } from "react-router-dom"
+import { searchCard } from "@/utils/search"
 
 const Dashboard = () => {
     const [workspaces, setWorkspaces] = useState<workspace[]>([])
     const [boards, setBoards] = useState<board[]>([])
     const [cards, setCards] = useState<card[]>([])
     const [lists, setLists] = useState<list[]>([])
+    const [filterCards, setFilterCards] = useState<card[]>([])
+    const [searchQuery, setSearchQuery] = useState("")
+    const location = useLocation()
 
     useEffect(() => {
         setWorkspaces(loadWorkspaces())
@@ -52,7 +57,12 @@ const Dashboard = () => {
         }
         saveLists(listsToSave)
         setLists(loadLists())
-    }, [])
+
+        const params = new URLSearchParams(location.search)
+        const query = params.get("search") || ""
+        setSearchQuery(query)
+        setFilterCards(searchCard(cards, query))
+    }, [location.search])
 
     const items = [
         {
@@ -72,13 +82,45 @@ const Dashboard = () => {
         },
     ]
 
+    if (searchQuery)
+        return (
+            <section className="flex flex-col  mt-10 px-7 w-full">
+                <h1 className="text-2xl font-semibold gap-2 ">Search result ({total(filterCards)})</h1>
+                <hr className="mt-3 mb-5 border" />
+                <div className="flex flex-col gap-3 mb-5">
+                    {filterCards.length === 0 ? (
+                        <p>No Result</p>
+                    ) : (
+                        filterCards.map((card) => {
+                            const { workspace, boardTitle, listTitle } = cardDetails(
+                                workspaces,
+                                boards,
+                                lists,
+                                card
+                            )
+                            return (
+                                <Link key={card.id} to={`workspace/${workspace?.id}`}>
+                                    <DetailCard
+                                        card={card}
+                                        workspaceTitle={workspace?.title || ""}
+                                        boardTitle={boardTitle || ""}
+                                        listTitle={listTitle || ""}
+                                    />
+                                </Link>
+                            )
+                        })
+                    )}
+                </div>
+            </section>
+        )
+
     return (
         <section className="flex flex-col  mt-10 px-7 w-full">
             <h1 className="text-2xl font-semibold gap-2 ">Welcome Back!</h1>
             <hr className="mt-3 mb-5 border" />
-            <section className="flex gap-4 items-start">
+            <div className="flex gap-4 items-start">
                 <div className="flex flex-col w-2/3">
-                    <div className="grid grid-cols-3 gap-3">
+                    <section className="grid grid-cols-3 gap-3">
                         {items.map((item) => (
                             <div
                                 key={item.name}
@@ -91,30 +133,37 @@ const Dashboard = () => {
                                 {item.logo}
                             </div>
                         ))}
-                    </div>
+                    </section>
                     <section className="flex flex-col mt-3">
                         <div className="text-base font-semibold mb-2">Recent Cards</div>
                         <div className="flex flex-col gap-3 mb-5">
                             {cards.length === 0 ? (
                                 <p>No card have been created yet.</p>
                             ) : (
-                                cards.slice(0, 10).map((card) => {
-                                    const { workspaceTitle, boardTitle, listTitle } = cardDetails(
-                                        workspaces,
-                                        boards,
-                                        lists,
-                                        card
+                                cards
+                                    .sort(
+                                        (a, b) =>
+                                            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                                     )
-                                    return (
-                                        <DetailCard
-                                            key={card.id}
-                                            card={card}
-                                            workspaceTitle={workspaceTitle || ""}
-                                            boardTitle={boardTitle || ""}
-                                            listTitle={listTitle || ""}
-                                        />
-                                    )
-                                })
+                                    .slice(0, 10)
+                                    .map((card) => {
+                                        const { workspace, boardTitle, listTitle } = cardDetails(
+                                            workspaces,
+                                            boards,
+                                            lists,
+                                            card
+                                        )
+                                        return (
+                                            <Link key={card.id} to={`workspace/${workspace?.id}`}>
+                                                <DetailCard
+                                                    card={card}
+                                                    workspaceTitle={workspace?.title || ""}
+                                                    boardTitle={boardTitle || ""}
+                                                    listTitle={listTitle || ""}
+                                                />
+                                            </Link>
+                                        )
+                                    })
                             )}
                         </div>
                     </section>
@@ -122,7 +171,7 @@ const Dashboard = () => {
                 <div className="flex flex-col w-1/3 bg-gray-100 rounded-md p-2">
                     <div className="text-base font-semibold mb-2 ">Recent Boards</div>
                 </div>
-            </section>
+            </div>
         </section>
     )
 }

@@ -1,8 +1,8 @@
-import Activity from "@/components/Activity"
+import Activity from "@/pages/activity/components/Activity"
 import { activity } from "@/types/activity.type"
 import { workspace } from "@/types/workspace.type"
 import { filterActivityByWorkspace } from "@/utils/filter"
-import { loadWorkspaceById } from "@/utils/storage"
+import { defaultActivities, loadWorkspaceById, saveActivity } from "@/utils/storage"
 import { Building } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
@@ -13,6 +13,14 @@ const ActivityPage = () => {
     const [workspace, setWorkspace] = useState<workspace>()
 
     useEffect(() => {
+        let activitiesToSave = defaultActivities
+        console.log(defaultActivities)
+        const localActivities = localStorage.getItem("activities")
+        if (localActivities) {
+            activitiesToSave = JSON.parse(localActivities)
+        }
+        saveActivity(activitiesToSave)
+
         if (workspaceId) {
             const currentWorkspace = loadWorkspaceById(Number(workspaceId))
             setWorkspace(currentWorkspace)
@@ -30,7 +38,7 @@ const ActivityPage = () => {
             </div>
             <hr className="mt-3 mb-5 border" />
             {activities.map((activity) => (
-                <Activity key={activity.id} activity={activity} workspaceTitle="" />
+                <Activity key={activity.id} activity={activity} />
             ))}
         </section>
     )

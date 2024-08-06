@@ -71,7 +71,13 @@ const List = ({
         setTitle(e.target.value)
     }
 
-    function handleOnBlur() {
+    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === "Enter") {
+            handleConfirm()
+        }
+    }
+
+    function handleConfirm() {
         editList(list.id, title, list.boardId)
         setIsEdit(false)
     }
@@ -90,7 +96,8 @@ const List = ({
                         type="text"
                         value={title}
                         onChange={handleOnChange}
-                        onBlur={handleOnBlur}
+                        onBlur={handleConfirm}
+                        onKeyDown={handleOnKeyDown}
                         autoFocus
                     />
                 ) : (

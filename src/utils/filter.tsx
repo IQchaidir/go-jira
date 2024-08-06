@@ -33,10 +33,11 @@ export function filterCardByList(listId: number) {
 
 export function filterActivityByWorkspace(workspaceId: number) {
     const activities = loadActivities()
+    console.log(activities)
     const filterActivity = activities.filter((activity: activity) => {
         return activity.workspaceId === workspaceId
     })
-
+    console.log(filterActivity)
     return filterActivity
 }
 

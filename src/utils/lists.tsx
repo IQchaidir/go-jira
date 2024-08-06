@@ -1,22 +1,27 @@
 import { list } from "@/types/list.type"
-import { loadLists, saveLists } from "./storage"
+import { loadBoardById, loadLists, saveLists } from "./storage"
 import { deleteCardByListId } from "./cards"
+import { createActivity } from "./activity"
 
 export function createList(title: string, boardId: number) {
     const lists = loadLists()
+    const board = loadBoardById(boardId)
     const id = lists.length ? lists[lists.length - 1].id + 1 : 1
     const newlist = {
         id,
         boardId,
         title,
+        createdAt: new Date(),
     }
 
     const updatelists = [...lists, newlist]
     saveLists(updatelists)
+    createActivity(board.workspaceId, "Create", "list", title)
 }
 
 export function editList(id: number, title: string, boardId: number) {
     const lists = loadLists()
+    const board = loadBoardById(boardId)
 
     const editlist = {
         id,
@@ -31,10 +36,14 @@ export function editList(id: number, title: string, boardId: number) {
     })
 
     saveLists(updatelists)
+    createActivity(board.workspaceId, "Edit", "list", title)
 }
 
 export function deleteList(id: number) {
     const lists = loadLists()
+    const list = lists.find((list: list) => list.id === id)
+    const board = loadBoardById(list.boardId)
+    createActivity(board.workspaceId, "delete", "list", list.title)
     deleteCardByListId(id)
     const updatelists = lists.filter((list: list) => list.id !== id)
     saveLists(updatelists)

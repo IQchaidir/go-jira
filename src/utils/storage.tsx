@@ -8,14 +8,17 @@ export const defaultWorkspaces = [
     {
         id: 1,
         title: "Lorem Inc.",
+        createdAt: new Date(),
     },
     {
         id: 2,
         title: "Ipsum Inc.",
+        createdAt: new Date(),
     },
     {
         id: 3,
         title: "Academy",
+        createdAt: new Date(),
     },
 ]
 
@@ -24,11 +27,13 @@ export const defaultBoards = [
         id: 1,
         workspaceId: 1,
         title: "Task App",
+        createdAt: new Date(),
     },
     {
         id: 2,
         workspaceId: 1,
         title: "Web App",
+        createdAt: new Date(),
     },
 ]
 
@@ -37,11 +42,13 @@ export const defaultLists = [
         id: 1,
         boardId: 1,
         title: "To Do",
+        createdAt: new Date(),
     },
     {
         id: 2,
         boardId: 1,
         title: "Done",
+        createdAt: new Date(),
     },
 ]
 
@@ -50,11 +57,13 @@ export const defaultCards = [
         id: 1,
         listId: 1,
         title: "homepage",
+        createdAt: new Date(),
     },
     {
         id: 2,
         listId: 1,
         title: "interactive",
+        createdAt: new Date(),
     },
 ]
 
@@ -63,31 +72,37 @@ export const defaultActivities = [
         id: 1,
         workspaceId: 1,
         title: `Created board "Task App" `,
+        createdAt: new Date(),
     },
     {
         id: 2,
         workspaceId: 1,
         title: `Created board "Board App" `,
+        createdAt: new Date(),
     },
     {
         id: 3,
         workspaceId: 1,
         title: `Created list "To Do" `,
+        createdAt: new Date(),
     },
     {
         id: 4,
         workspaceId: 1,
         title: `Created list "Done" `,
+        createdAt: new Date(),
     },
     {
         id: 5,
         workspaceId: 1,
         title: `Created card "homepage" `,
+        createdAt: new Date(),
     },
     {
         id: 6,
         workspaceId: 1,
         title: `Created card "interactive" `,
+        createdAt: new Date(),
     },
 ]
 
@@ -183,6 +198,15 @@ export function loadLists() {
     } catch (error) {
         console.error("failed to load lists", error)
     }
+}
+
+export function loadListById(id: number) {
+    const lists = loadLists()
+    const list = lists.find((list: list) => {
+        return list.id === id
+    })
+
+    return list
 }
 
 export function saveActivity(activity: activity[]) {

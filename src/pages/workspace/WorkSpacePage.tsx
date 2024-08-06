@@ -44,7 +44,13 @@ const WorkSpacePage = () => {
         setTitle(e.target.value)
     }
 
-    function handleOnBlur() {
+    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === "Enter") {
+            handleConfirm()
+        }
+    }
+
+    function handleConfirm() {
         if (workspace) {
             editWorkspace(workspace.id, title)
             setWorkspace(loadWorkspaceById(workspace.id))
@@ -60,10 +66,13 @@ const WorkSpacePage = () => {
                 </div>
                 {isEdit ? (
                     <input
+                        className="focus:outline-none"
+                        style={{ width: `${title.length + 1}ch` }}
                         type="text"
                         value={title}
                         onChange={handleOnchange}
-                        onBlur={handleOnBlur}
+                        onBlur={handleConfirm}
+                        onKeyDown={handleOnKeyDown}
                         autoFocus
                     />
                 ) : (
