@@ -21,7 +21,7 @@ const SearchInput = () => {
         } else {
             params.delete("search")
         }
-        navigate(`?${params.toString()}`)
+        navigate(`/?${params.toString()}`)
     }
 
     return (

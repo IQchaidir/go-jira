@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { toast } from "@/components/ui/use-toast"
 import { createBoard } from "@/utils/boards"
 import { useState } from "react"
 
@@ -16,12 +17,18 @@ export function CreateBoardDialog({ onCreate, workspaceId }: { onCreate: () => v
 
     function handleSubmit() {
         if (title === "") {
-            return alert("title cannot be empty")
+            return toast({
+                title: "Title cannot be empty!",
+                variant: "destructive",
+            })
         }
         createBoard(title, workspaceId)
         onCreate()
         setTitle("")
         setOpen(false)
+        toast({
+            title: "Success create board!",
+        })
     }
 
     function handleClose() {

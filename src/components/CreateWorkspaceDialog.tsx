@@ -10,6 +10,7 @@ import {
 import { createWorkspace } from "@/utils/workspace"
 import { Plus } from "lucide-react"
 import { useState } from "react"
+import { toast } from "./ui/use-toast"
 
 export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
     const [title, setTitle] = useState<string>("")
@@ -17,12 +18,18 @@ export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
 
     function handleSubmit() {
         if (title === "") {
-            return alert("title cannot be empty")
+            return toast({
+                title: "Title cannot be empty!",
+                variant: "destructive",
+            })
         }
         createWorkspace(title)
         onCreate()
         setTitle("")
         setOpen(false)
+        toast({
+            title: "Success create workspace!",
+        })
     }
 
     function handleClose() {

@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { toast } from "@/components/ui/use-toast"
 import { deleteCard } from "@/utils/cards"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
@@ -18,6 +19,9 @@ export function DeleteCardDialog({ id, renderPage }: { id: number; renderPage: (
         deleteCard(id)
         renderPage()
         setOpen(false)
+        toast({
+            title: "Success delete card!",
+        })
     }
 
     function handleClose() {

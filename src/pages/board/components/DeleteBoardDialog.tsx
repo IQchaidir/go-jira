@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { toast } from "@/components/ui/use-toast"
 import { deleteBoard } from "@/utils/boards"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
@@ -20,6 +21,9 @@ export function DeleteBoardDialog({ id, workspaceId }: { id: number; workspaceId
         deleteBoard(id)
         setOpen(false)
         navigate(`/workspace/${workspaceId}`)
+        toast({
+            title: "Success delete board!",
+        })
     }
 
     function handleClose() {

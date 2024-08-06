@@ -8,6 +8,7 @@ import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
 import { filterBoardByWokrspace } from "@/utils/filter"
 import { CreateBoardDialog } from "./components/CreateBoardDialog"
 import { editWorkspace } from "@/utils/workspace"
+import { toast } from "@/components/ui/use-toast"
 
 const WorkSpacePage = () => {
     const { workspaceId } = useParams()
@@ -52,9 +53,15 @@ const WorkSpacePage = () => {
 
     function handleConfirm() {
         if (workspace) {
+            if (title === "") {
+                return setTitle(workspace.title)
+            }
             editWorkspace(workspace.id, title)
             setWorkspace(loadWorkspaceById(workspace.id))
             setIsEdit(false)
+            toast({
+                title: "Success edit workspace!",
+            })
         }
     }
 

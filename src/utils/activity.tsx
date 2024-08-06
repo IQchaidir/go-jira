@@ -17,7 +17,6 @@ export function createActivity(
     }
     const updateActivities = [...activities, newActivity]
     saveActivity(updateActivities)
-    console.log(loadActivities())
 }
 
 export function deleteActivity(workspaceId: number) {

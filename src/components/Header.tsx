@@ -2,7 +2,7 @@ import { Menu } from "lucide-react"
 import { Link } from "react-router-dom"
 import SearchInput from "./SearchInput"
 
-const Navbar = () => {
+const Header = () => {
     return (
         <header className="bg-white sticky top-0 shadow-md py-2 px-7 z-50 flex justify-between items-center w-full">
             <div className="flex gap-2">
@@ -16,4 +16,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Header

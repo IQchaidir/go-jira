@@ -5,6 +5,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useState } from "react"
 import { DeleteCardDialog } from "./DeleteCardDIalog"
+import { toast } from "@/components/ui/use-toast"
 
 const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
     const [title, setTitle] = useState(card.title)
@@ -30,9 +31,21 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
         setTitle(e.target.value)
     }
 
-    function handleOnBlur() {
+    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === "Enter") {
+            handleConfirm()
+        }
+    }
+
+    function handleConfirm() {
+        if (title === "") {
+            return setTitle(card.title)
+        }
         editCard(card.id, title, card.listId)
         setIsEdit(false)
+        toast({
+            title: "Success edit card!",
+        })
     }
 
     if (isDragging)
@@ -53,7 +66,8 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
                         type="text"
                         value={title}
                         onChange={handleOnChange}
-                        onBlur={handleOnBlur}
+                        onBlur={handleConfirm}
+                        onKeyDown={handleOnKeyDown}
                         autoFocus
                     />
                 ) : (

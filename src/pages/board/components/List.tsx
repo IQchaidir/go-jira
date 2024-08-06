@@ -10,6 +10,7 @@ import { saveCard } from "@/utils/storage"
 import { DeleteListDialog } from "./DeleteListDialog"
 import { CreateCardDialog } from "./CreateCardDialog"
 import { editList } from "@/utils/lists"
+import { toast } from "@/components/ui/use-toast"
 
 const List = ({
     list,
@@ -58,8 +59,15 @@ const List = ({
             const activeCardIndex = cards.findIndex((card) => card.id === activeId)
             const overCardIndex = cards.findIndex((card) => card.id === overId)
             const newCard = arrayMove(cards, activeCardIndex, overCardIndex)
-            saveCard(newCard)
-            return newCard
+
+            if (JSON.stringify(cards) !== JSON.stringify(newCard)) {
+                saveCard(newCard)
+                toast({
+                    title: "Reordered cards!",
+                })
+                return newCard
+            }
+            return cards
         })
     }
 
@@ -78,8 +86,14 @@ const List = ({
     }
 
     function handleConfirm() {
+        if (title === "") {
+            return setTitle(list.title)
+        }
         editList(list.id, title, list.boardId)
         setIsEdit(false)
+        toast({
+            title: "Success edit list!",
+        })
     }
 
     return (

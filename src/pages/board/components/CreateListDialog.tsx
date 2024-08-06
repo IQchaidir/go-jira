@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { toast } from "@/components/ui/use-toast"
 import { createList } from "@/utils/lists"
 import { Plus } from "lucide-react"
 import { useState } from "react"
@@ -17,12 +18,18 @@ export function CreateListDialog({ onCreate, boardId }: { onCreate: () => void; 
 
     function handleSubmit() {
         if (title === "") {
-            return alert("title cannot be empty")
+            return toast({
+                title: "title cannot be empty!",
+                variant: "destructive",
+            })
         }
         createList(title, boardId)
         onCreate()
         setTitle("")
         setOpen(false)
+        toast({
+            title: "Success create list!",
+        })
     }
 
     function handleClose() {

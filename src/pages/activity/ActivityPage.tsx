@@ -14,7 +14,6 @@ const ActivityPage = () => {
 
     useEffect(() => {
         let activitiesToSave = defaultActivities
-        console.log(defaultActivities)
         const localActivities = localStorage.getItem("activities")
         if (localActivities) {
             activitiesToSave = JSON.parse(localActivities)

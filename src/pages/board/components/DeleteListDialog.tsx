@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { toast } from "@/components/ui/use-toast"
 import { deleteList } from "@/utils/lists"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
@@ -18,6 +19,9 @@ export function DeleteListDialog({ id, renderPage }: { id: number; renderPage: (
         deleteList(id)
         renderPage()
         setOpen(false)
+        toast({
+            title: "Success delete list!",
+        })
     }
 
     function handleClose() {

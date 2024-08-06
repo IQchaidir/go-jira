@@ -4,6 +4,7 @@ import { list } from "@/types/list.type"
 import { workspace } from "@/types/workspace.type"
 import { cardDetails } from "@/utils/getDetail"
 import {
+    defaultActivities,
     defaultBoards,
     defaultCards,
     defaultLists,
@@ -11,6 +12,7 @@ import {
     loadCards,
     loadLists,
     loadWorkspaces,
+    saveActivity,
     saveBoard,
     saveCard,
     saveLists,
@@ -57,6 +59,13 @@ const Dashboard = () => {
         }
         saveLists(listsToSave)
         setLists(loadLists())
+
+        let activitiesToSave = defaultActivities
+        const localActivities = localStorage.getItem("activities")
+        if (localActivities) {
+            activitiesToSave = JSON.parse(localActivities)
+        }
+        saveActivity(activitiesToSave)
 
         const params = new URLSearchParams(location.search)
         const query = params.get("search") || ""

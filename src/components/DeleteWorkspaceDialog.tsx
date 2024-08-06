@@ -11,6 +11,7 @@ import { deleteWorkspace } from "@/utils/workspace"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "./ui/use-toast"
 
 export function DeleteWorkspaceDialog({ onDelete, id }: { onDelete: () => void; id: number }) {
     const [open, setOpen] = useState<boolean>(false)
@@ -21,6 +22,9 @@ export function DeleteWorkspaceDialog({ onDelete, id }: { onDelete: () => void; 
         onDelete()
         setOpen(false)
         navigate("/")
+        toast({
+            title: "Success delete workspace!",
+        })
     }
 
     function handleClose() {

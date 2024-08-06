@@ -7,6 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { toast } from "@/components/ui/use-toast"
 import { createCard } from "@/utils/cards"
 import { Plus } from "lucide-react"
 import { useState } from "react"
@@ -17,12 +18,18 @@ export function CreateCardDialog({ onCreate, listId }: { onCreate: () => void; l
 
     function handleSubmit() {
         if (title === "") {
-            return alert("title cannot be empty")
+            return toast({
+                title: "title cannot be empty!",
+                variant: "destructive",
+            })
         }
         createCard(title, listId)
         onCreate()
         setTitle("")
         setOpen(false)
+        toast({
+            title: "Success create card!",
+        })
     }
 
     function handleClose() {
@@ -39,7 +46,7 @@ export function CreateCardDialog({ onCreate, listId }: { onCreate: () => void; l
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create List</DialogTitle>
+                    <DialogTitle>Create Card</DialogTitle>
                 </DialogHeader>
                 <div>
                     <input

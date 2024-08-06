@@ -48,7 +48,8 @@ export function deleteBoard(id: number) {
 
 export function deleteBoardByWorkspaceId(workspaceId: number) {
     const boards = loadBoards()
-    boards.map((board: board) => deleteListByBoardId(board.id))
+    const filterBoards = boards.map((board: board) => board.workspaceId === workspaceId)
+    filterBoards.map((board: board) => deleteListByBoardId(board.id))
     const updateBoards = boards.filter((board: board) => board.workspaceId !== workspaceId)
     saveBoard(updateBoards)
 }

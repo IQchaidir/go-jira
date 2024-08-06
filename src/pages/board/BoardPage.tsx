@@ -14,6 +14,7 @@ import { card } from "@/types/card.type"
 import { DeleteBoardDialog } from "./components/DeleteBoardDialog"
 import { CreateListDialog } from "./components/CreateListDialog"
 import { editBoard } from "@/utils/boards"
+import { toast } from "@/components/ui/use-toast"
 
 const BoardPage = () => {
     const { boardId } = useParams()
@@ -50,8 +51,15 @@ const BoardPage = () => {
             const activeListIndex = lists.findIndex((list) => list.id === activeId)
             const overListIndex = lists.findIndex((list) => list.id === overId)
             const newList = arrayMove(lists, activeListIndex, overListIndex)
-            saveLists(newList)
-            return newList
+
+            if (JSON.stringify(lists) !== JSON.stringify(newList)) {
+                saveLists(newList)
+                toast({
+                    title: "Reordered lists!",
+                })
+                return newList
+            }
+            return lists
         })
     }
 
@@ -84,8 +92,14 @@ const BoardPage = () => {
 
     function handleConfirm() {
         if (board && workspace) {
+            if (title === "") {
+                return setTitle(board.title)
+            }
             editBoard(board.id, title, workspace.id)
             setIsEdit(false)
+            toast({
+                title: "Success edit board!",
+            })
         }
     }
 
