@@ -1,7 +1,6 @@
 import { Building, Clipboard } from "lucide-react"
-
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useNavigation, useParams } from "react-router-dom"
 import { workspace } from "@/types/workspace.type"
 import { board } from "@/types/board.type"
 import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
@@ -16,6 +15,7 @@ const WorkSpacePage = () => {
     const [workspace, setWorkspace] = useState<workspace>()
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [title, setTitle] = useState("")
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (workspaceId) {
@@ -62,6 +62,7 @@ const WorkSpacePage = () => {
             toast({
                 title: "Success edit workspace!",
             })
+            navigate(`/workspace/${workspace.id}`)
         }
     }
 

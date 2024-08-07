@@ -1,6 +1,6 @@
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { workspace } from "@/types/workspace.type"
-import { loadWorkspaces } from "@/utils/storage"
+import { defaultWorkspaces, loadWorkspaces, saveWorkspace } from "@/utils/storage"
 import { LayoutDashboard, Menu } from "lucide-react"
 import { useEffect, useState } from "react"
 import { CreateWorkspaceDialog } from "./CreateWorkspaceDialog"
@@ -11,6 +11,14 @@ const SheetMenu = () => {
     const [workspaces, setWorkspaces] = useState<workspace[]>([])
 
     useEffect(() => {
+        let workspacesToSave = defaultWorkspaces
+
+        const localWorkspaces = localStorage.getItem("workspaces")
+        if (localWorkspaces) {
+            workspacesToSave = JSON.parse(localWorkspaces)
+        }
+
+        saveWorkspace(workspacesToSave)
         setWorkspaces(loadWorkspaces())
     }, [])
 
