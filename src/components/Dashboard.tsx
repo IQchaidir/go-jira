@@ -8,7 +8,6 @@ import {
     defaultBoards,
     defaultCards,
     defaultLists,
-    defaultWorkspaces,
     loadBoards,
     loadCards,
     loadLists,
@@ -17,7 +16,6 @@ import {
     saveBoard,
     saveCard,
     saveLists,
-    saveWorkspace,
 } from "@/utils/storage"
 import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"

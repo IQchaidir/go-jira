@@ -1,6 +1,6 @@
 import { Building, Clipboard } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link, useNavigate, useNavigation, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { workspace } from "@/types/workspace.type"
 import { board } from "@/types/board.type"
 import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
