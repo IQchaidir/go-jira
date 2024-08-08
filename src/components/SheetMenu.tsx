@@ -48,7 +48,7 @@ const SheetMenu = () => {
                     </SheetClose>
                     {workspaces.map((workspace) => (
                         <SheetClose asChild key={workspace.id}>
-                            <WorkspaceAccordion workspace={workspace} refreshData={refreshData} />
+                            <WorkspaceAccordion workspace={workspace} />
                         </SheetClose>
                     ))}
                 </div>

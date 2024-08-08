@@ -16,7 +16,7 @@ export function CreateBoardDialog({ onCreate, workspaceId }: { onCreate: () => v
     const [open, setOpen] = useState<boolean>(false)
 
     function handleSubmit() {
-        if (title === "") {
+        if (title.trim() === "") {
             return toast({
                 title: "Title cannot be empty!",
                 variant: "destructive",

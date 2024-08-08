@@ -17,7 +17,7 @@ export function cardDetails(workspaces: workspace[], boards: board[], lists: lis
 
     return {
         listTitle: list?.title,
-        boardTitle: board?.title,
+        board: board,
         workspace: workspace,
     }
 }

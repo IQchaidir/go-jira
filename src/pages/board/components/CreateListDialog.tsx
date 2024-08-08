@@ -17,7 +17,7 @@ export function CreateListDialog({ onCreate, boardId }: { onCreate: () => void; 
     const [open, setOpen] = useState<boolean>(false)
 
     function handleSubmit() {
-        if (title === "") {
+        if (title.trim() === "") {
             return toast({
                 title: "title cannot be empty!",
                 variant: "destructive",

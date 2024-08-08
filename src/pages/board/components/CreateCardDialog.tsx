@@ -17,7 +17,7 @@ export function CreateCardDialog({ onCreate, listId }: { onCreate: () => void; l
     const [open, setOpen] = useState<boolean>(false)
 
     function handleSubmit() {
-        if (title === "") {
+        if (title.trim() === "") {
             return toast({
                 title: "title cannot be empty!",
                 variant: "destructive",

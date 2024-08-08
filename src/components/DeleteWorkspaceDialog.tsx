@@ -34,11 +34,8 @@ export function DeleteWorkspaceDialog({ onDelete, id }: { onDelete: () => void; 
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
-                <div className="flex gap-1 items-center cursor-pointer ml-4 mt-3 text-red-500">
-                    <div className="p-1 rounded-md ">
-                        <TrashIcon className="w-5 h-5" />
-                    </div>
-                    <span className="text-base">Delete</span>
+                <div className="flex cursor-pointer text-red-500">
+                    <TrashIcon className="w-7 h-7" />
                 </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

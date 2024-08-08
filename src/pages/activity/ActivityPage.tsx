@@ -35,10 +35,12 @@ const ActivityPage = () => {
                 </div>
                 <span>{workspace?.title}</span>
             </div>
-            <hr className="mt-3 mb-5 border" />
-            {activities.map((activity) => (
-                <Activity key={activity.id} activity={activity} />
-            ))}
+            <hr className="mt-2 mb-5 border" />
+            {activities
+                .sort((a, b) => b.id - a.id)
+                .map((activity) => (
+                    <Activity key={activity.id} activity={activity} />
+                ))}
         </section>
     )
 }

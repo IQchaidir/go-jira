@@ -9,7 +9,6 @@ import { list } from "@/types/list.type"
 import List from "./components/List"
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
 import { arrayMove, SortableContext } from "@dnd-kit/sortable"
-import { createPortal } from "react-dom"
 import { card } from "@/types/card.type"
 import { DeleteBoardDialog } from "./components/DeleteBoardDialog"
 import { CreateListDialog } from "./components/CreateListDialog"
@@ -92,7 +91,7 @@ const BoardPage = () => {
 
     function handleConfirm() {
         if (board && workspace) {
-            if (title === "") {
+            if (title.trim() === "" || title.trim() === board.title) {
                 return setTitle(board.title)
             }
             editBoard(board.id, title, workspace.id)
@@ -127,7 +126,7 @@ const BoardPage = () => {
                 </div>
                 {board && workspace && <DeleteBoardDialog id={board.id} workspaceId={workspace.id} />}
             </div>
-            <hr className="mt-3 mb-5 border" />
+            <hr className="mt-2 mb-5 border" />
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                 <div className="grid  md:grid-cols-4 gap-4 ">
                     <SortableContext items={lists.map((list) => list.id)}>
@@ -144,20 +143,16 @@ const BoardPage = () => {
                     </SortableContext>
                     {board && <CreateListDialog boardId={board.id} onCreate={renderPage} />}
                 </div>
-
-                {createPortal(
-                    <DragOverlay>
-                        {activeList && board && (
-                            <List
-                                list={activeList}
-                                cards={getCardsByListId(activeList.id, cards)}
-                                setCards={setCards}
-                                renderPage={renderPage}
-                            />
-                        )}
-                    </DragOverlay>,
-                    document.body
-                )}
+                <DragOverlay>
+                    {activeList && board && (
+                        <List
+                            list={activeList}
+                            cards={getCardsByListId(activeList.id, cards)}
+                            setCards={setCards}
+                            renderPage={renderPage}
+                        />
+                    )}
+                </DragOverlay>
             </DndContext>
         </section>
     )

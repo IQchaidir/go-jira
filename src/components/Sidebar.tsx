@@ -1,5 +1,5 @@
 import { LayoutDashboard } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { CreateWorkspaceDialog } from "./CreateWorkspaceDialog"
 import { useEffect, useState } from "react"
 import { workspace } from "@/types/workspace.type"
@@ -8,6 +8,7 @@ import { WorkspaceAccordion } from "./WorkSpaceAccordion"
 
 const Sidebar = () => {
     const [workspaces, setWorkspaces] = useState<workspace[]>([])
+    const location = useLocation()
 
     useEffect(() => {
         let workspacesToSave = defaultWorkspaces
@@ -20,6 +21,10 @@ const Sidebar = () => {
         saveWorkspace(workspacesToSave)
         setWorkspaces(loadWorkspaces())
     }, [])
+
+    useEffect(() => {
+        setWorkspaces(loadWorkspaces())
+    }, [location])
 
     function refreshData() {
         setWorkspaces(loadWorkspaces)
@@ -39,7 +44,7 @@ const Sidebar = () => {
                 </div>
             </Link>
             {workspaces.map((workspace) => (
-                <WorkspaceAccordion key={workspace.id} workspace={workspace} refreshData={refreshData} />
+                <WorkspaceAccordion key={workspace.id} workspace={workspace} />
             ))}
         </aside>
     )

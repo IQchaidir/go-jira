@@ -1,6 +1,5 @@
 import { card } from "@/types/card.type"
 import { editCard } from "@/utils/cards"
-
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useState } from "react"
@@ -38,11 +37,12 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
     }
 
     function handleConfirm() {
-        if (title === "") {
+        if (title.trim() === "" || title.trim() === card.title) {
             return setTitle(card.title)
         }
         editCard(card.id, title, card.listId)
         setIsEdit(false)
+        renderPage()
         toast({
             title: "Success edit card!",
         })

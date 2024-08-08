@@ -9,7 +9,7 @@ const Activity = ({ activity }: { activity: activity }) => {
             </div>
             <div className="flex flex-col">
                 <span className="text-xl">{activity.title}</span>
-                <span className="text-lg">{activity.createdAt.toLocaleString()}</span>
+                <span className="text-lg">{new Date(activity.createdAt).toLocaleString()}</span>
             </div>
         </div>
     )

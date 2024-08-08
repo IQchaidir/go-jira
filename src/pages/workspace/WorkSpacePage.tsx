@@ -8,6 +8,7 @@ import { filterBoardByWokrspace } from "@/utils/filter"
 import { CreateBoardDialog } from "./components/CreateBoardDialog"
 import { editWorkspace } from "@/utils/workspace"
 import { toast } from "@/components/ui/use-toast"
+import { DeleteWorkspaceDialog } from "@/components/DeleteWorkspaceDialog"
 
 const WorkSpacePage = () => {
     const { workspaceId } = useParams()
@@ -53,7 +54,7 @@ const WorkSpacePage = () => {
 
     function handleConfirm() {
         if (workspace) {
-            if (title === "") {
+            if (title.trim() === "" || title.trim() === workspace.title) {
                 return setTitle(workspace.title)
             }
             editWorkspace(workspace.id, title)
@@ -68,26 +69,29 @@ const WorkSpacePage = () => {
 
     return (
         <section className="flex flex-col mt-10 px-7 w-full">
-            <div className="flex items-center text-2xl font-semibold gap-2 ">
-                <div className="p-1 bg-purple-500 rounded-md text-white">
-                    <Building className="w-8 h-8" />
+            <div className="flex justify-between items-center text-2xl font-semibold gap-2 ">
+                <div className="flex gap-2 items-center">
+                    <div className="p-1 bg-purple-500 rounded-md text-white">
+                        <Building className="w-8 h-8" />
+                    </div>
+                    {isEdit ? (
+                        <input
+                            className="focus:outline-none"
+                            style={{ width: `${title.length + 1}ch` }}
+                            type="text"
+                            value={title}
+                            onChange={handleOnchange}
+                            onBlur={handleConfirm}
+                            onKeyDown={handleOnKeyDown}
+                            autoFocus
+                        />
+                    ) : (
+                        <span onClick={handleClick}>{title}</span>
+                    )}
                 </div>
-                {isEdit ? (
-                    <input
-                        className="focus:outline-none"
-                        style={{ width: `${title.length + 1}ch` }}
-                        type="text"
-                        value={title}
-                        onChange={handleOnchange}
-                        onBlur={handleConfirm}
-                        onKeyDown={handleOnKeyDown}
-                        autoFocus
-                    />
-                ) : (
-                    <span onClick={handleClick}>{title}</span>
-                )}
+                {workspace && <DeleteWorkspaceDialog id={workspace?.id} onDelete={onCreate} />}
             </div>
-            <hr className="mt-3 mb-5 border" />
+            <hr className="mt-2 mb-5 border" />
             <div className="flex gap-2 text-lg font-semibold px-5">
                 <Clipboard />
                 <span>Your Board</span>

@@ -5,7 +5,6 @@ import { useState } from "react"
 import { CSS } from "@dnd-kit/utilities"
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
 import Card from "./Card"
-import { createPortal } from "react-dom"
 import { saveCard } from "@/utils/storage"
 import { DeleteListDialog } from "./DeleteListDialog"
 import { CreateCardDialog } from "./CreateCardDialog"
@@ -86,7 +85,7 @@ const List = ({
     }
 
     function handleConfirm() {
-        if (title === "") {
+        if (title.trim() === "" || title.trim() === list.title) {
             return setTitle(list.title)
         }
         editList(list.id, title, list.boardId)
@@ -132,12 +131,10 @@ const List = ({
                         {!isDragging &&
                             cards.map((card) => <Card key={card.id} card={card} renderPage={renderPage} />)}
                     </SortableContext>
-                    {createPortal(
-                        <DragOverlay>
-                            {activeCard && <Card card={activeCard} renderPage={renderPage} />}
-                        </DragOverlay>,
-                        document.body
-                    )}
+
+                    <DragOverlay>
+                        {activeCard && <Card card={activeCard} renderPage={renderPage} />}
+                    </DragOverlay>
                 </DndContext>
             </div>
             <CreateCardDialog listId={list.id} onCreate={renderPage} />

@@ -101,18 +101,18 @@ const Dashboard = () => {
                         <p>No Result</p>
                     ) : (
                         filterCards.map((card) => {
-                            const { workspace, boardTitle, listTitle } = cardDetails(
+                            const { workspace, board, listTitle } = cardDetails(
                                 workspaces,
                                 boards,
                                 lists,
                                 card
                             )
                             return (
-                                <Link key={card.id} to={`workspace/${workspace?.id}`}>
+                                <Link key={card.id} to={`board/${board?.id}`}>
                                     <DetailCard
                                         card={card}
                                         workspaceTitle={workspace?.title || ""}
-                                        boardTitle={boardTitle || ""}
+                                        boardTitle={board?.title || ""}
                                         listTitle={listTitle || ""}
                                     />
                                 </Link>
@@ -126,7 +126,7 @@ const Dashboard = () => {
     return (
         <section className="flex flex-col  mt-10 px-3 md:px-7 w-full">
             <h1 className="text-2xl font-semibold gap-2 ">Welcome Back!</h1>
-            <hr className="mt-3 mb-5 border" />
+            <hr className="mt-2 mb-5 border" />
             <div className="flex flex-col md:flex-row gap-4 items-start">
                 <div className="flex flex-col w-full md:w-2/3">
                     <section className="grid grid-cols-3 gap-3">
@@ -150,24 +150,21 @@ const Dashboard = () => {
                                 <p>No card have been created yet.</p>
                             ) : (
                                 cards
-                                    .sort(
-                                        (a, b) =>
-                                            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-                                    )
+                                    .sort((a, b) => b.id - a.id)
                                     .slice(0, 10)
                                     .map((card) => {
-                                        const { workspace, boardTitle, listTitle } = cardDetails(
+                                        const { workspace, board, listTitle } = cardDetails(
                                             workspaces,
                                             boards,
                                             lists,
                                             card
                                         )
                                         return (
-                                            <Link key={card.id} to={`workspace/${workspace?.id}`}>
+                                            <Link key={card.id} to={`board/${board?.id}`}>
                                                 <DetailCard
                                                     card={card}
                                                     workspaceTitle={workspace?.title || ""}
-                                                    boardTitle={boardTitle || ""}
+                                                    boardTitle={board?.title || ""}
                                                     listTitle={listTitle || ""}
                                                 />
                                             </Link>
