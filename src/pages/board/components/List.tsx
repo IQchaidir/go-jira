@@ -1,33 +1,20 @@
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
-import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable"
+import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { useState } from "react"
 import { CSS } from "@dnd-kit/utilities"
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core"
 import Card from "./Card"
-import { saveCard } from "@/utils/storage"
 import { DeleteListDialog } from "./DeleteListDialog"
 import { CreateCardDialog } from "./CreateCardDialog"
 import { editList } from "@/utils/lists"
 import { toast } from "@/components/ui/use-toast"
 
-const List = ({
-    list,
-    cards,
-    setCards,
-    renderPage,
-}: {
-    list: list
-    cards: card[]
-    setCards: React.Dispatch<React.SetStateAction<card[]>>
-    renderPage: () => void
-}) => {
-    const [activeCard, setActiveCard] = useState<card | null>(null)
+const List = ({ list, cards, renderPage }: { list: list; cards: card[]; renderPage: () => void }) => {
     const [title, setTitle] = useState(list.title)
     const [isEdit, setIsEdit] = useState<boolean>(false)
 
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
-        id: list.id,
+        id: `list-${list.id}`,
         data: {
             type: "list",
             list,
@@ -37,37 +24,6 @@ const List = ({
     const style = {
         transition,
         transform: CSS.Transform.toString(transform),
-    }
-
-    function handleDragStart(event: DragStartEvent) {
-        if (event.active.data.current?.type === "card") {
-            setActiveCard(event.active.data.current.card)
-        }
-        return
-    }
-
-    function handleDragEnd(event: DragEndEvent) {
-        const { active, over } = event
-        if (!over) {
-            return
-        }
-        const activeId = active.id
-        const overId = over.id
-
-        setCards((cards) => {
-            const activeCardIndex = cards.findIndex((card) => card.id === activeId)
-            const overCardIndex = cards.findIndex((card) => card.id === overId)
-            const newCard = arrayMove(cards, activeCardIndex, overCardIndex)
-
-            if (JSON.stringify(cards) !== JSON.stringify(newCard)) {
-                saveCard(newCard)
-                toast({
-                    title: "Rearrange cards!",
-                })
-                return newCard
-            }
-            return cards
-        })
     }
 
     function handleClick() {
@@ -85,7 +41,7 @@ const List = ({
     }
 
     function handleConfirm() {
-        if (title.trim() === "" || title.trim() === list.title) {
+        if (title === "") {
             return setTitle(list.title)
         }
         editList(list.id, title, list.boardId)
@@ -119,26 +75,18 @@ const List = ({
                     </span>
                 )}
                 <div {...attributes} {...listeners} className="flex-1 h-full cursor-pointer "></div>
-                {!isDragging && (
-                    <div className="flex gap-2">
-                        <DeleteListDialog id={list.id} renderPage={renderPage} />
-                    </div>
-                )}
+                <div className="flex gap-2">
+                    <DeleteListDialog id={list.id} renderPage={renderPage} />
+                </div>
             </div>
             <div className="flex flex-col gap-2 flex-1 overflow-auto">
-                <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-                    <SortableContext items={cards.map((card) => card.id)}>
-                        {!isDragging &&
-                            cards.map((card) => <Card key={card.id} card={card} renderPage={renderPage} />)}
-                    </SortableContext>
-
-                    <DragOverlay>
-                        {activeCard && <Card card={activeCard} renderPage={renderPage} />}
-                    </DragOverlay>
-                </DndContext>
+                <SortableContext items={cards.map((card) => `card-${card.id}`)}>
+                    {cards.map((card) => (
+                        <Card key={`card-${card.id}`} card={card} renderPage={renderPage} />
+                    ))}
+                </SortableContext>
             </div>
             <CreateCardDialog listId={list.id} onCreate={renderPage} />
-
             {isDragging && <div className="absolute inset-0 bg-white"></div>}
         </div>
     )

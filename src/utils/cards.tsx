@@ -3,10 +3,13 @@ import { loadBoardById, loadCards, loadListById, saveCard } from "./storage"
 import { createActivity } from "./activity"
 
 export function createCard(title: string, listId: number) {
-    const cards = loadCards()
+    const cards: card[] = loadCards()
     const list = loadListById(listId)
     const board = loadBoardById(list.boardId)
-    const id = cards.length ? cards[cards.length - 1].id + 1 : 1
+    const id =
+        cards.reduce((max, obj) => {
+            return obj.id > max ? obj.id : max
+        }, 0) + 1
     const newcard = {
         id,
         listId,

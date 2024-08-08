@@ -2,7 +2,7 @@ import { Building } from "lucide-react"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import type { board } from "@/types/board.type"
-import { loadBoardById, loadCards, loadWorkspaceById, saveLists } from "@/utils/storage"
+import { loadBoardById, loadCards, loadWorkspaceById, saveCard, saveLists } from "@/utils/storage"
 import { filterlistByBoard, getCardsByListId } from "@/utils/filter"
 import { workspace } from "@/types/workspace.type"
 import { list } from "@/types/list.type"
@@ -14,6 +14,8 @@ import { DeleteBoardDialog } from "./components/DeleteBoardDialog"
 import { CreateListDialog } from "./components/CreateListDialog"
 import { editBoard } from "@/utils/boards"
 import { toast } from "@/components/ui/use-toast"
+import Card from "./components/Card"
+import { createPortal } from "react-dom"
 
 const BoardPage = () => {
     const { boardId } = useParams()
@@ -22,6 +24,7 @@ const BoardPage = () => {
     const [lists, setLists] = useState<list[]>([])
     const [cards, setCards] = useState<card[]>([])
     const [activeList, setActiveList] = useState<list | null>(null)
+    const [activeCard, setActiveCard] = useState<card | null>(null)
     const [title, setTitle] = useState("")
     const [isEdit, setIsEdit] = useState<boolean>(false)
 
@@ -34,32 +37,78 @@ const BoardPage = () => {
     function handleDragStart(event: DragStartEvent) {
         if (event.active.data.current?.type === "list") {
             setActiveList(event.active.data.current.list)
+            setActiveCard(null)
+        }
+        if (event.active.data.current?.type === "card") {
+            setActiveCard(event.active.data.current.card)
+            setActiveList(null)
         }
         return
     }
 
     function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event
-        if (!over) {
-            return
+
+        if (!over) return
+
+        const activeId = String(active.id)
+        const overId = String(over.id)
+
+        if (activeId.startsWith("list-") && overId.startsWith("list-")) {
+            setLists((lists) => {
+                const activeListIndex = lists.findIndex((list) => `list-${list.id}` === activeId)
+                const overListIndex = lists.findIndex((list) => `list-${list.id}` === overId)
+                const newList = arrayMove(lists, activeListIndex, overListIndex)
+                if (JSON.stringify(lists) !== JSON.stringify(newList)) {
+                    saveLists(newList)
+                    toast({
+                        title: "Rearrange lists!",
+                    })
+                    return newList
+                }
+                return lists
+            })
         }
-        const activeId = active.id
-        const overId = over.id
 
-        setLists((lists) => {
-            const activeListIndex = lists.findIndex((list) => list.id === activeId)
-            const overListIndex = lists.findIndex((list) => list.id === overId)
-            const newList = arrayMove(lists, activeListIndex, overListIndex)
+        if (activeId.startsWith("card-") && overId.startsWith("card-")) {
+            const activeCardListId = cards.find((card) => `card-${card.id}` === activeId)?.listId
+            const overCardListId = cards.find((card) => `card-${card.id}` === overId)?.listId
 
-            if (JSON.stringify(lists) !== JSON.stringify(newList)) {
-                saveLists(newList)
-                toast({
-                    title: "Rearrange lists!",
+            if (activeCardListId && overCardListId && activeCardListId === overCardListId) {
+                setCards((cards) => {
+                    const activeCardIndex = cards.findIndex((card) => `card-${card.id}` === activeId)
+                    const overCardIndex = cards.findIndex((card) => `card-${card.id}` === overId)
+                    const newCards = arrayMove(cards, activeCardIndex, overCardIndex)
+                    if (JSON.stringify(cards) !== JSON.stringify(newCards)) {
+                        saveCard(newCards)
+                        toast({
+                            title: "Rearrange cards!",
+                        })
+                        return newCards
+                    }
+                    return cards
                 })
-                return newList
             }
-            return lists
-        })
+        }
+        if (activeId.startsWith("card-") && overId.startsWith("list-")) {
+            const activeCardId = Number(activeId.replace("card-", ""))
+            const overListId = Number(overId.replace("list-", ""))
+
+            setCards((cards) => {
+                const updatedCards = cards.map((card) =>
+                    card.id === activeCardId ? { ...card, listId: overListId } : card
+                )
+
+                if (JSON.stringify(cards) !== JSON.stringify(updatedCards)) {
+                    saveCard(updatedCards)
+                    toast({
+                        title: "Moved card to another list!",
+                    })
+                    return updatedCards
+                }
+                return cards
+            })
+        }
     }
 
     useEffect(() => {
@@ -91,7 +140,7 @@ const BoardPage = () => {
 
     function handleConfirm() {
         if (board && workspace) {
-            if (title.trim() === "" || title.trim() === board.title) {
+            if (title === "") {
                 return setTitle(board.title)
             }
             editBoard(board.id, title, workspace.id)
@@ -126,33 +175,36 @@ const BoardPage = () => {
                 </div>
                 {board && workspace && <DeleteBoardDialog id={board.id} workspaceId={workspace.id} />}
             </div>
-            <hr className="mt-2 mb-5 border" />
+            <hr className="mt-3 mb-5 border" />
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                 <div className="grid  md:grid-cols-4 gap-4 ">
-                    <SortableContext items={lists.map((list) => list.id)}>
+                    <SortableContext items={lists.map((list) => `list-${list.id}`)}>
                         {board &&
                             lists.map((list) => (
                                 <List
-                                    key={list.id}
+                                    key={`list-${list.id}`}
                                     list={list}
                                     cards={getCardsByListId(list.id, cards)}
-                                    setCards={setCards}
                                     renderPage={renderPage}
                                 />
                             ))}
                     </SortableContext>
                     {board && <CreateListDialog boardId={board.id} onCreate={renderPage} />}
                 </div>
-                <DragOverlay>
-                    {activeList && board && (
-                        <List
-                            list={activeList}
-                            cards={getCardsByListId(activeList.id, cards)}
-                            setCards={setCards}
-                            renderPage={renderPage}
-                        />
-                    )}
-                </DragOverlay>
+
+                {createPortal(
+                    <DragOverlay>
+                        {activeList && !activeCard && (
+                            <List
+                                cards={getCardsByListId(activeList.id, cards)}
+                                list={activeList}
+                                renderPage={renderPage}
+                            />
+                        )}
+                        {!activeList && activeCard && <Card card={activeCard} renderPage={renderPage} />}
+                    </DragOverlay>,
+                    document.body // Target DOM node
+                )}
             </DndContext>
         </section>
     )

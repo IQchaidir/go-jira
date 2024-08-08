@@ -4,9 +4,12 @@ import { deleteCardByListId } from "./cards"
 import { createActivity } from "./activity"
 
 export function createList(title: string, boardId: number) {
-    const lists = loadLists()
+    const lists: list[] = loadLists()
     const board = loadBoardById(boardId)
-    const id = lists.length ? lists[lists.length - 1].id + 1 : 1
+    const id =
+        lists.reduce((max, obj) => {
+            return obj.id > max ? obj.id : max
+        }, 0) + 1
     const newlist = {
         id,
         boardId,

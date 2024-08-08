@@ -1,5 +1,6 @@
 import { card } from "@/types/card.type"
 import { editCard } from "@/utils/cards"
+
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useState } from "react"
@@ -10,7 +11,7 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
     const [title, setTitle] = useState(card.title)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
-        id: card.id,
+        id: `card-${card.id}`,
         data: {
             type: "card",
             card,
@@ -37,7 +38,7 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
     }
 
     function handleConfirm() {
-        if (title.trim() === "" || title.trim() === card.title) {
+        if (title.trim() === "") {
             return setTitle(card.title)
         }
         editCard(card.id, title, card.listId)
@@ -48,16 +49,12 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
         })
     }
 
-    if (isDragging)
-        return (
-            <div ref={setNodeRef} style={style} className=" flex w-full bg-white rounded-md">
-                <div className=" p-1 font-semibold text-white">{card.title}</div>
-                <div {...attributes} {...listeners} className="h-full flex-1"></div>
-            </div>
-        )
-
     return (
-        <div ref={setNodeRef} style={style} className=" flex w-full bg-white rounded-md items-center">
+        <div
+            ref={setNodeRef}
+            style={style}
+            className="relative flex w-full bg-white rounded-md items-center "
+        >
             <div onClick={handleClick} className=" p-1 font-semibold">
                 {isEdit ? (
                     <input
@@ -76,6 +73,7 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
             </div>
             <div {...attributes} {...listeners} className="h-full flex-1"></div>
             <DeleteCardDialog id={card.id} renderPage={renderPage} />
+            {isDragging && <div className="absolute inset-0 bg-white rounded-md"></div>}
         </div>
     )
 }
