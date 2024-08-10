@@ -1,6 +1,6 @@
 import { Building } from "lucide-react"
 import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import type { board } from "@/types/board.type"
 import { loadBoardById, loadCards, loadWorkspaceById, saveCard, saveLists } from "@/utils/storage"
 import { filterlistByBoard, getCardsByListId } from "@/utils/filter"
@@ -28,10 +28,10 @@ const BoardPage = () => {
     const [title, setTitle] = useState("")
     const [isEdit, setIsEdit] = useState<boolean>(false)
 
-    function renderPage() {
-        if (board) setBoard(loadBoardById(board.id))
-        if (lists && board) setLists(filterlistByBoard(board.id))
-        if (cards) setCards(loadCards)
+    function fetchDataFromLocal() {
+        setBoard(loadBoardById(Number(boardId)))
+        setLists(filterlistByBoard(Number(boardId)))
+        setCards(loadCards())
     }
 
     function handleDragStart(event: DragStartEvent) {
@@ -112,35 +112,18 @@ const BoardPage = () => {
     }
 
     useEffect(() => {
-        if (boardId) {
-            const currentBoard = loadBoardById(Number(boardId))
-            setBoard(currentBoard)
-            setTitle(currentBoard.title)
+        fetchDataFromLocal()
+        const currentBoard = loadBoardById(Number(boardId))
+        setTitle(currentBoard.title)
+        const currentWorkspace = loadWorkspaceById(Number(currentBoard.workspaceId))
+        setWorkspace(currentWorkspace)
+    }, [])
 
-            const currentWorkspace = loadWorkspaceById(Number(currentBoard.workspaceId))
-            setWorkspace(currentWorkspace)
-            setLists(filterlistByBoard(Number(boardId)))
-            setCards(loadCards())
-        }
-    }, [boardId])
+    function handleConfirm(e: React.FormEvent) {
+        e.preventDefault()
 
-    function handleClick() {
-        setIsEdit(true)
-    }
-
-    function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setTitle(e.target.value)
-    }
-
-    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.key === "Enter") {
-            handleConfirm()
-        }
-    }
-
-    function handleConfirm() {
         if (board && workspace) {
-            if (title === "") {
+            if (title.trim() === "" || title.trim() === board.title) {
                 return setTitle(board.title)
             }
             editBoard(board.id, title, workspace.id)
@@ -160,17 +143,19 @@ const BoardPage = () => {
                     </div>
                     <span>{workspace?.title}</span> -
                     {isEdit ? (
-                        <input
-                            className="flex h-full  focus:outline-none"
-                            type="text"
-                            value={title}
-                            onChange={handleOnChange}
-                            onBlur={handleConfirm}
-                            onKeyDown={handleOnKeyDown}
-                            autoFocus
-                        />
+                        <form onSubmit={handleConfirm}>
+                            <input
+                                className="flex focus:outline-none"
+                                style={{ width: `${title.length}ch` }}
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                onBlur={handleConfirm}
+                                autoFocus
+                            />
+                        </form>
                     ) : (
-                        <span onClick={handleClick}>{title}</span>
+                        <span onClick={() => setIsEdit(true)}>{title}</span>
                     )}
                 </div>
                 {board && workspace && <DeleteBoardDialog id={board.id} workspaceId={workspace.id} />}
@@ -185,11 +170,11 @@ const BoardPage = () => {
                                     key={`list-${list.id}`}
                                     list={list}
                                     cards={getCardsByListId(list.id, cards)}
-                                    renderPage={renderPage}
+                                    fetchDataFromLocal={fetchDataFromLocal}
                                 />
                             ))}
                     </SortableContext>
-                    {board && <CreateListDialog boardId={board.id} onCreate={renderPage} />}
+                    {board && <CreateListDialog boardId={board.id} onCreate={fetchDataFromLocal} />}
                 </div>
 
                 {createPortal(
@@ -198,12 +183,14 @@ const BoardPage = () => {
                             <List
                                 cards={getCardsByListId(activeList.id, cards)}
                                 list={activeList}
-                                renderPage={renderPage}
+                                fetchDataFromLocal={fetchDataFromLocal}
                             />
                         )}
-                        {!activeList && activeCard && <Card card={activeCard} renderPage={renderPage} />}
+                        {!activeList && activeCard && (
+                            <Card card={activeCard} fetchDataFromLocal={fetchDataFromLocal} />
+                        )}
                     </DragOverlay>,
-                    document.body // Target DOM node
+                    document.body
                 )}
             </DndContext>
         </section>

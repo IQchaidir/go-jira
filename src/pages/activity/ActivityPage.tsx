@@ -2,7 +2,7 @@ import Activity from "@/pages/activity/components/Activity"
 import { activity } from "@/types/activity.type"
 import { workspace } from "@/types/workspace.type"
 import { filterActivityByWorkspace } from "@/utils/filter"
-import { defaultActivities, loadWorkspaceById, saveActivity } from "@/utils/storage"
+import { loadActivities, loadWorkspaceById } from "@/utils/storage"
 import { Building } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
@@ -13,13 +13,7 @@ const ActivityPage = () => {
     const [workspace, setWorkspace] = useState<workspace>()
 
     useEffect(() => {
-        let activitiesToSave = defaultActivities
-        const localActivities = localStorage.getItem("activities")
-        if (localActivities) {
-            activitiesToSave = JSON.parse(localActivities)
-        }
-        saveActivity(activitiesToSave)
-
+        setActivities(loadActivities())
         if (workspaceId) {
             const currentWorkspace = loadWorkspaceById(Number(workspaceId))
             setWorkspace(currentWorkspace)

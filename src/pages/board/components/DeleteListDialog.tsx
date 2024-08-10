@@ -12,12 +12,12 @@ import { deleteList } from "@/utils/lists"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 
-export function DeleteListDialog({ id, renderPage }: { id: number; renderPage: () => void }) {
+export function DeleteListDialog({ id, fetchDataFromLocal }: { id: number; fetchDataFromLocal: () => void }) {
     const [open, setOpen] = useState<boolean>(false)
 
     function handleSubmit() {
         deleteList(id)
-        renderPage()
+        fetchDataFromLocal()
         setOpen(false)
         toast({
             title: "Success delete list!",

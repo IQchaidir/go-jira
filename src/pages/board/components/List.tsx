@@ -9,7 +9,15 @@ import { CreateCardDialog } from "./CreateCardDialog"
 import { editList } from "@/utils/lists"
 import { toast } from "@/components/ui/use-toast"
 
-const List = ({ list, cards, renderPage }: { list: list; cards: card[]; renderPage: () => void }) => {
+const List = ({
+    list,
+    cards,
+    fetchDataFromLocal,
+}: {
+    list: list
+    cards: card[]
+    fetchDataFromLocal: () => void
+}) => {
     const [title, setTitle] = useState(list.title)
     const [isEdit, setIsEdit] = useState<boolean>(false)
 
@@ -26,22 +34,9 @@ const List = ({ list, cards, renderPage }: { list: list; cards: card[]; renderPa
         transform: CSS.Transform.toString(transform),
     }
 
-    function handleClick() {
-        setIsEdit(true)
-    }
-
-    function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setTitle(e.target.value)
-    }
-
-    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.key === "Enter") {
-            handleConfirm()
-        }
-    }
-
-    function handleConfirm() {
-        if (title === "") {
+    function handleConfirm(e: React.FormEvent) {
+        e.preventDefault()
+        if (title.trim() === "" || title.trim() === list.title) {
             return setTitle(list.title)
         }
         editList(list.id, title, list.boardId)
@@ -59,34 +54,35 @@ const List = ({ list, cards, renderPage }: { list: list; cards: card[]; renderPa
         >
             <div className="flex justify-between items-center">
                 {isEdit ? (
-                    <input
-                        className="text-lg bg-gray-100 focus:outline-none"
-                        style={{ width: `${title.length + 1}ch` }}
-                        type="text"
-                        value={title}
-                        onChange={handleOnChange}
-                        onBlur={handleConfirm}
-                        onKeyDown={handleOnKeyDown}
-                        autoFocus
-                    />
+                    <form onSubmit={handleConfirm}>
+                        <input
+                            className="text-lg bg-gray-100 focus:outline-none"
+                            style={{ width: `${title.length + 1}ch` }}
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={handleConfirm}
+                            autoFocus
+                        />
+                    </form>
                 ) : (
-                    <span onClick={handleClick} className="text-lg">
+                    <span onClick={() => setIsEdit(true)} className="text-lg">
                         {title}
                     </span>
                 )}
                 <div {...attributes} {...listeners} className="flex-1 h-full cursor-pointer "></div>
                 <div className="flex gap-2">
-                    <DeleteListDialog id={list.id} renderPage={renderPage} />
+                    <DeleteListDialog id={list.id} fetchDataFromLocal={fetchDataFromLocal} />
                 </div>
             </div>
             <div className="flex flex-col gap-2 flex-1 overflow-auto">
                 <SortableContext items={cards.map((card) => `card-${card.id}`)}>
                     {cards.map((card) => (
-                        <Card key={`card-${card.id}`} card={card} renderPage={renderPage} />
+                        <Card key={`card-${card.id}`} card={card} fetchDataFromLocal={fetchDataFromLocal} />
                     ))}
                 </SortableContext>
             </div>
-            <CreateCardDialog listId={list.id} onCreate={renderPage} />
+            <CreateCardDialog listId={list.id} onCreate={fetchDataFromLocal} />
             {isDragging && <div className="absolute inset-0 bg-white"></div>}
         </div>
     )

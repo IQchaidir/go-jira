@@ -3,8 +3,8 @@ import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { workspace } from "@/types/workspace.type"
 import { board } from "@/types/board.type"
-import { defaultBoards, loadWorkspaceById, saveBoard } from "@/utils/storage"
-import { filterBoardByWokrspace } from "@/utils/filter"
+import { loadWorkspaceById } from "@/utils/storage"
+import { filterBoardByWorkspace } from "@/utils/filter"
 import { CreateBoardDialog } from "./components/CreateBoardDialog"
 import { editWorkspace } from "@/utils/workspace"
 import { toast } from "@/components/ui/use-toast"
@@ -18,41 +18,21 @@ const WorkSpacePage = () => {
     const [title, setTitle] = useState("")
     const navigate = useNavigate()
 
+    function fetchBoardFromLocal() {
+        setBoards(filterBoardByWorkspace(Number(workspaceId)))
+    }
+
     useEffect(() => {
         if (workspaceId) {
             const currentWorkspace = loadWorkspaceById(Number(workspaceId))
             setWorkspace(currentWorkspace)
             if (currentWorkspace) setTitle(currentWorkspace.title)
         }
-
-        let boardsToSave = defaultBoards
-        const localBoards = localStorage.getItem("boards")
-        if (localBoards) {
-            boardsToSave = JSON.parse(localBoards)
-        }
-        saveBoard(boardsToSave)
-        setBoards(filterBoardByWokrspace(Number(workspaceId)))
+        fetchBoardFromLocal()
     }, [workspaceId])
 
-    function onCreate() {
-        if (workspace) setBoards(filterBoardByWokrspace(workspace.id))
-    }
-
-    function handleClick() {
-        setIsEdit(true)
-    }
-
-    function handleOnchange(e: React.ChangeEvent<HTMLInputElement>) {
-        setTitle(e.target.value)
-    }
-
-    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.key === "Enter") {
-            handleConfirm()
-        }
-    }
-
-    function handleConfirm() {
+    function handleConfirm(e: React.FormEvent) {
+        e.preventDefault()
         if (workspace) {
             if (title.trim() === "" || title.trim() === workspace.title) {
                 return setTitle(workspace.title)
@@ -75,21 +55,22 @@ const WorkSpacePage = () => {
                         <Building className="w-8 h-8" />
                     </div>
                     {isEdit ? (
-                        <input
-                            className="focus:outline-none"
-                            style={{ width: `${title.length + 1}ch` }}
-                            type="text"
-                            value={title}
-                            onChange={handleOnchange}
-                            onBlur={handleConfirm}
-                            onKeyDown={handleOnKeyDown}
-                            autoFocus
-                        />
+                        <form onSubmit={handleConfirm}>
+                            <input
+                                className="focus:outline-none"
+                                style={{ width: `${title.length}ch` }}
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                onBlur={handleConfirm}
+                                autoFocus
+                            />
+                        </form>
                     ) : (
-                        <span onClick={handleClick}>{title}</span>
+                        <span onClick={() => setIsEdit(true)}>{title}</span>
                     )}
                 </div>
-                {workspace && <DeleteWorkspaceDialog id={workspace?.id} onDelete={onCreate} />}
+                {workspace && <DeleteWorkspaceDialog id={workspace.id} />}
             </div>
             <hr className="mt-2 mb-5 border" />
             <div className="flex gap-2 text-lg font-semibold px-5">
@@ -104,7 +85,12 @@ const WorkSpacePage = () => {
                         </div>
                     </Link>
                 ))}
-                {workspace && <CreateBoardDialog onCreate={onCreate} workspaceId={workspace?.id} />}
+                {workspace && (
+                    <CreateBoardDialog
+                        fetchBoardFromLocal={fetchBoardFromLocal}
+                        workspaceId={workspace?.id}
+                    />
+                )}
             </div>
         </section>
     )

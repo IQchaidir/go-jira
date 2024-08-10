@@ -3,26 +3,14 @@ import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
 import { workspace } from "@/types/workspace.type"
 import { cardDetails } from "@/utils/getDetail"
-import {
-    defaultActivities,
-    defaultBoards,
-    defaultCards,
-    defaultLists,
-    loadBoards,
-    loadCards,
-    loadLists,
-    loadWorkspaces,
-    saveActivity,
-    saveBoard,
-    saveCard,
-    saveLists,
-} from "@/utils/storage"
+import { loadBoards, loadCards, loadLists, loadWorkspaces } from "@/utils/storage"
 import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 import DetailCard from "./DetailCard"
 import { Link, useLocation } from "react-router-dom"
 import { searchCard } from "@/utils/search"
+import SearchResult from "./SearchResult"
 
 const Dashboard = () => {
     const [workspaces, setWorkspaces] = useState<workspace[]>([])
@@ -35,37 +23,9 @@ const Dashboard = () => {
 
     useEffect(() => {
         setWorkspaces(loadWorkspaces())
-
-        let boardsToSave = defaultBoards
-        const localBoards = localStorage.getItem("boards")
-        if (localBoards) {
-            boardsToSave = JSON.parse(localBoards)
-        }
-        saveBoard(boardsToSave)
         setBoards(loadBoards())
-
-        let cardsToSave = defaultCards
-        const localCards = localStorage.getItem("cards")
-        if (localCards) {
-            cardsToSave = JSON.parse(localCards)
-        }
-        saveCard(cardsToSave)
         setCards(loadCards())
-
-        let listsToSave = defaultLists
-        const localLists = localStorage.getItem("lists")
-        if (localLists) {
-            listsToSave = JSON.parse(localLists)
-        }
-        saveLists(listsToSave)
         setLists(loadLists())
-
-        let activitiesToSave = defaultActivities
-        const localActivities = localStorage.getItem("activities")
-        if (localActivities) {
-            activitiesToSave = JSON.parse(localActivities)
-        }
-        saveActivity(activitiesToSave)
 
         const params = new URLSearchParams(location.search)
         const query = params.get("search") || ""
@@ -93,34 +53,7 @@ const Dashboard = () => {
 
     if (searchQuery)
         return (
-            <section className="flex flex-col  mt-10 px-3 md:px-7 w-full">
-                <h1 className="text-2xl font-semibold gap-2 ">Search result ({total(filterCards)})</h1>
-                <hr className="mt-3 mb-5 border" />
-                <div className="flex flex-col gap-3 mb-5">
-                    {filterCards.length === 0 ? (
-                        <p>No Result</p>
-                    ) : (
-                        filterCards.map((card) => {
-                            const { workspace, board, listTitle } = cardDetails(
-                                workspaces,
-                                boards,
-                                lists,
-                                card
-                            )
-                            return (
-                                <Link key={card.id} to={`board/${board?.id}`}>
-                                    <DetailCard
-                                        card={card}
-                                        workspaceTitle={workspace?.title || ""}
-                                        boardTitle={board?.title || ""}
-                                        listTitle={listTitle || ""}
-                                    />
-                                </Link>
-                            )
-                        })
-                    )}
-                </div>
-            </section>
+            <SearchResult boards={boards} filterCards={filterCards} lists={lists} workspaces={workspaces} />
         )
 
     return (

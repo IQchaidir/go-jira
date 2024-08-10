@@ -112,13 +112,17 @@ export function saveWorkspace(workspaces: workspace[]) {
 
 export function loadWorkspaces() {
     const workspaces = localStorage.getItem("workspaces")
+
     if (!workspaces) {
-        saveWorkspace([])
+        saveWorkspace(defaultWorkspaces)
+        return defaultWorkspaces
     }
+
     try {
-        return JSON.parse(workspaces || "[]")
+        return JSON.parse(workspaces)
     } catch (error) {
-        console.error("failed load workspace", error)
+        console.error("Failed to load workspaces", error)
+        return defaultWorkspaces
     }
 }
 
@@ -138,11 +142,12 @@ export function loadCards() {
     const cards = localStorage.getItem("cards")
 
     if (!cards) {
-        saveCard([])
+        saveCard(defaultCards)
+        return defaultCards
     }
 
     try {
-        return JSON.parse(cards || "[]")
+        return JSON.parse(cards)
     } catch (error) {
         console.error("failed load card", error)
     }
@@ -164,11 +169,12 @@ export function loadBoards() {
     const boards = localStorage.getItem("boards")
 
     if (!boards) {
-        saveBoard([])
+        saveBoard(defaultBoards)
+        return defaultBoards
     }
 
     try {
-        return JSON.parse(boards || "[]")
+        return JSON.parse(boards)
     } catch (error) {
         console.error("failed to load boards", error)
     }
@@ -190,11 +196,12 @@ export function loadLists() {
     const lists = localStorage.getItem("lists")
 
     if (!lists) {
-        saveLists([])
+        saveLists(defaultLists)
+        return defaultLists
     }
 
     try {
-        return JSON.parse(lists || "[]")
+        return JSON.parse(lists)
     } catch (error) {
         console.error("failed to load lists", error)
     }
@@ -216,11 +223,12 @@ export function loadActivities() {
     const activity = localStorage.getItem("activities")
 
     if (!activity) {
-        saveActivity([])
+        saveActivity(defaultActivities)
+        return defaultActivities
     }
 
     try {
-        return JSON.parse(activity || "[]")
+        return JSON.parse(activity)
     } catch (error) {
         console.error("failed to load activity", error)
     }

@@ -4,27 +4,20 @@ import { defaultWorkspaces, loadWorkspaces, saveWorkspace } from "@/utils/storag
 import { LayoutDashboard, Menu } from "lucide-react"
 import { useEffect, useState } from "react"
 import { CreateWorkspaceDialog } from "./CreateWorkspaceDialog"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { WorkspaceAccordion } from "./WorkSpaceAccordion"
 
 const SheetMenu = () => {
     const [workspaces, setWorkspaces] = useState<workspace[]>([])
+    const location = useLocation()
 
-    useEffect(() => {
-        let workspacesToSave = defaultWorkspaces
-
-        const localWorkspaces = localStorage.getItem("workspaces")
-        if (localWorkspaces) {
-            workspacesToSave = JSON.parse(localWorkspaces)
-        }
-
-        saveWorkspace(workspacesToSave)
-        setWorkspaces(loadWorkspaces())
-    }, [])
-
-    function refreshData() {
+    function fetchWorkspaceFromLocal() {
         setWorkspaces(loadWorkspaces)
     }
+
+    useEffect(() => {
+        setWorkspaces(loadWorkspaces())
+    }, [location])
     return (
         <Sheet>
             <SheetTrigger>
@@ -34,7 +27,7 @@ const SheetMenu = () => {
             <SheetContent className="w-2/4" side={"left"}>
                 <div className="flex flex-col text-lg font-semibold justify-between mt-20 gap-2">
                     <div className="flex justify-between">
-                        <span>Workspaces</span> <CreateWorkspaceDialog onCreate={refreshData} />
+                        <span>Workspaces</span> <CreateWorkspaceDialog onCreate={fetchWorkspaceFromLocal} />
                     </div>
                     <SheetClose asChild>
                         <Link to={`/`}>

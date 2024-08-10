@@ -11,7 +11,13 @@ import { toast } from "@/components/ui/use-toast"
 import { createBoard } from "@/utils/boards"
 import { useState } from "react"
 
-export function CreateBoardDialog({ onCreate, workspaceId }: { onCreate: () => void; workspaceId: number }) {
+export function CreateBoardDialog({
+    fetchBoardFromLocal,
+    workspaceId,
+}: {
+    fetchBoardFromLocal: () => void
+    workspaceId: number
+}) {
     const [title, setTitle] = useState<string>("")
     const [open, setOpen] = useState<boolean>(false)
 
@@ -23,7 +29,7 @@ export function CreateBoardDialog({ onCreate, workspaceId }: { onCreate: () => v
             })
         }
         createBoard(title, workspaceId)
-        onCreate()
+        fetchBoardFromLocal()
         setTitle("")
         setOpen(false)
         toast({

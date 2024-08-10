@@ -13,13 +13,12 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "./ui/use-toast"
 
-export function DeleteWorkspaceDialog({ onDelete, id }: { onDelete: () => void; id: number }) {
+export function DeleteWorkspaceDialog({ id }: { id: number }) {
     const [open, setOpen] = useState<boolean>(false)
     const navigate = useNavigate()
 
     function handleSubmit() {
         deleteWorkspace(id)
-        onDelete()
         setOpen(false)
         navigate("/")
         toast({

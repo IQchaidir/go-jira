@@ -12,12 +12,12 @@ import { deleteCard } from "@/utils/cards"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 
-export function DeleteCardDialog({ id, renderPage }: { id: number; renderPage: () => void }) {
+export function DeleteCardDialog({ id, fetchDataFromLocal }: { id: number; fetchDataFromLocal: () => void }) {
     const [open, setOpen] = useState<boolean>(false)
 
     function handleSubmit() {
         deleteCard(id)
-        renderPage()
+        fetchDataFromLocal()
         setOpen(false)
         toast({
             title: "Success delete card!",

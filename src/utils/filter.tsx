@@ -4,7 +4,7 @@ import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
 import { activity } from "@/types/activity.type"
 
-export function filterBoardByWokrspace(workspaceId: number) {
+export function filterBoardByWorkspace(workspaceId: number) {
     const boards = loadBoards()
     const filterBoard = boards.filter((board: board) => {
         return board.workspaceId === workspaceId

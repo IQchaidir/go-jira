@@ -1,13 +1,12 @@
 import { card } from "@/types/card.type"
 import { editCard } from "@/utils/cards"
-
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useState } from "react"
 import { DeleteCardDialog } from "./DeleteCardDIalog"
 import { toast } from "@/components/ui/use-toast"
 
-const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
+const Card = ({ card, fetchDataFromLocal }: { card: card; fetchDataFromLocal: () => void }) => {
     const [title, setTitle] = useState(card.title)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
@@ -23,27 +22,14 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
         transform: CSS.Transform.toString(transform),
     }
 
-    function handleClick() {
-        setIsEdit(true)
-    }
-
-    function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setTitle(e.target.value)
-    }
-
-    function handleOnKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.key === "Enter") {
-            handleConfirm()
-        }
-    }
-
-    function handleConfirm() {
-        if (title.trim() === "") {
+    function handleConfirm(e: React.FormEvent) {
+        e.preventDefault()
+        if (title.trim() === "" || title.trim() === card.title) {
             return setTitle(card.title)
         }
         editCard(card.id, title, card.listId)
         setIsEdit(false)
-        renderPage()
+        fetchDataFromLocal()
         toast({
             title: "Success edit card!",
         })
@@ -55,24 +41,25 @@ const Card = ({ card, renderPage }: { card: card; renderPage: () => void }) => {
             style={style}
             className="relative flex w-full bg-white rounded-md items-center "
         >
-            <div onClick={handleClick} className=" p-1 font-semibold">
+            <div onClick={() => setIsEdit(true)} className=" p-1 font-semibold">
                 {isEdit ? (
-                    <input
-                        className="  focus:outline-none"
-                        style={{ width: `${title.length + 1}ch` }}
-                        type="text"
-                        value={title}
-                        onChange={handleOnChange}
-                        onBlur={handleConfirm}
-                        onKeyDown={handleOnKeyDown}
-                        autoFocus
-                    />
+                    <form onSubmit={handleConfirm}>
+                        <input
+                            className="focus:outline-none"
+                            style={{ width: `${title.length + 1}ch` }}
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            onBlur={handleConfirm}
+                            autoFocus
+                        />
+                    </form>
                 ) : (
                     <>{card.title}</>
                 )}
             </div>
             <div {...attributes} {...listeners} className="h-full flex-1"></div>
-            <DeleteCardDialog id={card.id} renderPage={renderPage} />
+            <DeleteCardDialog id={card.id} fetchDataFromLocal={fetchDataFromLocal} />
             {isDragging && <div className="absolute inset-0 bg-white rounded-md"></div>}
         </div>
     )
