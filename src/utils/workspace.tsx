@@ -16,6 +16,8 @@ export function createWorkspace(title: string) {
     saveWorkspace(updateWorkspaces)
 
     createActivity(newWorkspace.id, "Create", "workspace", title)
+
+    return newWorkspace
 }
 
 export function editWorkspace(id: number, title: string) {

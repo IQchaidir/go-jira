@@ -11,10 +11,12 @@ import { createWorkspace } from "@/utils/workspace"
 import { Plus } from "lucide-react"
 import React, { useState } from "react"
 import { toast } from "./ui/use-toast"
+import { useNavigate } from "react-router-dom"
 
 export function CreateWorkspaceDialog({ fetchWorkspaceFromLocal }: { fetchWorkspaceFromLocal: () => void }) {
     const [title, setTitle] = useState<string>("")
     const [open, setOpen] = useState<boolean>(false)
+    const navigate = useNavigate()
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -24,13 +26,14 @@ export function CreateWorkspaceDialog({ fetchWorkspaceFromLocal }: { fetchWorksp
                 variant: "destructive",
             })
         }
-        createWorkspace(title)
+        const newWorkspace = createWorkspace(title)
         fetchWorkspaceFromLocal()
         setTitle("")
         setOpen(false)
         toast({
             title: "Success create workspace!",
         })
+        navigate(`/workspace/${newWorkspace.id}`)
     }
 
     return (
@@ -43,7 +46,7 @@ export function CreateWorkspaceDialog({ fetchWorkspaceFromLocal }: { fetchWorksp
                     <DialogTitle>Create Workspace</DialogTitle>
                 </DialogHeader>
                 <div>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} method="post">
                         <input
                             type="text"
                             value={title}

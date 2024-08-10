@@ -8,7 +8,7 @@ import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 import DetailCard from "./DetailCard"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigation } from "react-router-dom"
 import { searchCard } from "@/utils/search"
 import SearchResult from "./SearchResult"
 
@@ -20,6 +20,7 @@ const Dashboard = () => {
     const [filterCards, setFilterCards] = useState<card[]>([])
     const [searchQuery, setSearchQuery] = useState("")
     const location = useLocation()
+    const navigation = useNavigation()
 
     useEffect(() => {
         setWorkspaces(loadWorkspaces())
@@ -31,7 +32,7 @@ const Dashboard = () => {
         const query = params.get("search") || ""
         setSearchQuery(query)
         setFilterCards(searchCard(cards, query))
-    }, [location.search])
+    }, [location.search, navigation.state])
 
     const items = [
         {
