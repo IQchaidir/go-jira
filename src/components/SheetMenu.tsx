@@ -1,6 +1,6 @@
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { workspace } from "@/types/workspace.type"
-import { defaultWorkspaces, loadWorkspaces, saveWorkspace } from "@/utils/storage"
+import { loadWorkspaces } from "@/utils/storage"
 import { LayoutDashboard, Menu } from "lucide-react"
 import { useEffect, useState } from "react"
 import { CreateWorkspaceDialog } from "./CreateWorkspaceDialog"
