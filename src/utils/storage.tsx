@@ -10,16 +10,6 @@ export const defaultWorkspaces = [
         title: "Lorem Inc.",
         createdAt: new Date(),
     },
-    {
-        id: 2,
-        title: "Ipsum Inc.",
-        createdAt: new Date(),
-    },
-    {
-        id: 3,
-        title: "Academy",
-        createdAt: new Date(),
-    },
 ]
 
 export const defaultBoards = [

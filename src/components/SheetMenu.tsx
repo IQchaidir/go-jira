@@ -27,7 +27,8 @@ const SheetMenu = () => {
             <SheetContent className="w-2/4" side={"left"}>
                 <div className="flex flex-col text-lg font-semibold justify-between mt-20 gap-2">
                     <div className="flex justify-between">
-                        <span>Workspaces</span> <CreateWorkspaceDialog onCreate={fetchWorkspaceFromLocal} />
+                        <span>Workspaces</span>{" "}
+                        <CreateWorkspaceDialog fetchWorkspaceFromLocal={fetchWorkspaceFromLocal} />
                     </div>
                     <SheetClose asChild>
                         <Link to={`/`}>

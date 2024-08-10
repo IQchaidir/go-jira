@@ -1,5 +1,5 @@
 import { Building } from "lucide-react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import type { board } from "@/types/board.type"
 import { loadBoardById, loadCards, loadWorkspaceById, saveCard, saveLists } from "@/utils/storage"
@@ -141,7 +141,10 @@ const BoardPage = () => {
                     <div className="p-1 bg-purple-500 rounded-md text-white">
                         <Building className="w-8 h-8" />
                     </div>
-                    <span>{workspace?.title}</span> -
+                    <Link to={`/workspace/${workspace?.id}`}>
+                        <span>{workspace?.title}</span>
+                    </Link>{" "}
+                    -
                     {isEdit ? (
                         <form onSubmit={handleConfirm}>
                             <input
@@ -174,7 +177,7 @@ const BoardPage = () => {
                                 />
                             ))}
                     </SortableContext>
-                    {board && <CreateListDialog boardId={board.id} onCreate={fetchDataFromLocal} />}
+                    {board && <CreateListDialog boardId={board.id} fetchDataFromLocal={fetchDataFromLocal} />}
                 </div>
 
                 {createPortal(

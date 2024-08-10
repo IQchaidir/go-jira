@@ -21,7 +21,8 @@ export function CreateBoardDialog({
     const [title, setTitle] = useState<string>("")
     const [open, setOpen] = useState<boolean>(false)
 
-    function handleSubmit() {
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault()
         if (title.trim() === "") {
             return toast({
                 title: "Title cannot be empty!",
@@ -37,10 +38,6 @@ export function CreateBoardDialog({
         })
     }
 
-    function handleClose() {
-        setOpen(false)
-    }
-
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
@@ -53,16 +50,18 @@ export function CreateBoardDialog({
                     <DialogTitle>Create Board</DialogTitle>
                 </DialogHeader>
                 <div>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Board title...."
-                        className="w-full border border-black rounded-md p-1 "
-                    />
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Board title...."
+                            className="w-full border border-black rounded-md p-1 "
+                        />
+                    </form>
                 </div>
                 <DialogFooter>
-                    <Button variant={"destructive"} onClick={handleClose}>
+                    <Button variant={"destructive"} onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
                     <Button type="submit" onClick={handleSubmit}>

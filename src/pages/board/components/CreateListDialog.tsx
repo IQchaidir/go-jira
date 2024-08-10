@@ -10,13 +10,20 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { createList } from "@/utils/lists"
 import { Plus } from "lucide-react"
-import { useState } from "react"
+import React, { useState } from "react"
 
-export function CreateListDialog({ onCreate, boardId }: { onCreate: () => void; boardId: number }) {
+export function CreateListDialog({
+    fetchDataFromLocal,
+    boardId,
+}: {
+    fetchDataFromLocal: () => void
+    boardId: number
+}) {
     const [title, setTitle] = useState<string>("")
     const [open, setOpen] = useState<boolean>(false)
 
-    function handleSubmit() {
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault()
         if (title.trim() === "") {
             return toast({
                 title: "title cannot be empty!",
@@ -24,16 +31,12 @@ export function CreateListDialog({ onCreate, boardId }: { onCreate: () => void; 
             })
         }
         createList(title, boardId)
-        onCreate()
+        fetchDataFromLocal()
         setTitle("")
         setOpen(false)
         toast({
             title: "Success create list!",
         })
-    }
-
-    function handleClose() {
-        setOpen(false)
     }
 
     return (
@@ -49,16 +52,18 @@ export function CreateListDialog({ onCreate, boardId }: { onCreate: () => void; 
                     <DialogTitle>Create List</DialogTitle>
                 </DialogHeader>
                 <div>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="List title...."
-                        className="w-full border border-black rounded-md p-1 "
-                    />
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="List title...."
+                            className="w-full border border-black rounded-md p-1 "
+                        />
+                    </form>
                 </div>
                 <DialogFooter>
-                    <Button variant={"destructive"} onClick={handleClose}>
+                    <Button variant={"destructive"} onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
                     <Button type="submit" onClick={handleSubmit}>

@@ -9,14 +9,15 @@ import {
 } from "@/components/ui/dialog"
 import { createWorkspace } from "@/utils/workspace"
 import { Plus } from "lucide-react"
-import { useState } from "react"
+import React, { useState } from "react"
 import { toast } from "./ui/use-toast"
 
-export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
+export function CreateWorkspaceDialog({ fetchWorkspaceFromLocal }: { fetchWorkspaceFromLocal: () => void }) {
     const [title, setTitle] = useState<string>("")
     const [open, setOpen] = useState<boolean>(false)
 
-    function handleSubmit() {
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault()
         if (title.trim() === "") {
             return toast({
                 title: "Title cannot be empty!",
@@ -24,16 +25,12 @@ export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
             })
         }
         createWorkspace(title)
-        onCreate()
+        fetchWorkspaceFromLocal()
         setTitle("")
         setOpen(false)
         toast({
             title: "Success create workspace!",
         })
-    }
-
-    function handleClose() {
-        setOpen(false)
     }
 
     return (
@@ -46,16 +43,18 @@ export function CreateWorkspaceDialog({ onCreate }: { onCreate: () => void }) {
                     <DialogTitle>Create Workspace</DialogTitle>
                 </DialogHeader>
                 <div>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Workspace title...."
-                        className="w-full border border-black rounded-md p-1 "
-                    />
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Workspace title...."
+                            className="w-full border border-black rounded-md p-1 "
+                        />
+                    </form>
                 </div>
                 <DialogFooter>
-                    <Button variant={"destructive"} onClick={handleClose}>
+                    <Button variant={"destructive"} onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
                     <Button type="submit" onClick={handleSubmit}>

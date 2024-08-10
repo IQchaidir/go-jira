@@ -41,6 +41,7 @@ const List = ({
         }
         editList(list.id, title, list.boardId)
         setIsEdit(false)
+        fetchDataFromLocal()
         toast({
             title: "Success edit list!",
         })
@@ -82,7 +83,7 @@ const List = ({
                     ))}
                 </SortableContext>
             </div>
-            <CreateCardDialog listId={list.id} onCreate={fetchDataFromLocal} />
+            <CreateCardDialog listId={list.id} fetchDataFromLocal={fetchDataFromLocal} />
             {isDragging && <div className="absolute inset-0 bg-white"></div>}
         </div>
     )

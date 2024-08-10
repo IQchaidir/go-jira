@@ -26,10 +26,6 @@ export function DeleteWorkspaceDialog({ id }: { id: number }) {
         })
     }
 
-    function handleClose() {
-        setOpen(false)
-    }
-
     return (
         <Dialog open={open}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
@@ -43,7 +39,7 @@ export function DeleteWorkspaceDialog({ id }: { id: number }) {
                 </DialogHeader>
                 <div></div>
                 <DialogFooter>
-                    <Button variant={"destructive"} onClick={handleClose}>
+                    <Button variant={"destructive"} onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
                     <Button type="submit" onClick={handleSubmit}>
