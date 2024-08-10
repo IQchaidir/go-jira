@@ -27,7 +27,7 @@ const ActivityPage = () => {
                 <div className="p-1 bg-purple-500 rounded-md text-white">
                     <Building className="w-8 h-8" />
                 </div>
-                <span>{workspace?.title}</span>
+                <span>{workspace?.title}</span> - Activity
             </div>
             <hr className="mt-2 mb-5 border" />
             {activities
