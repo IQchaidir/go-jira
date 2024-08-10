@@ -146,7 +146,7 @@ const BoardPage = () => {
                         <form onSubmit={handleConfirm}>
                             <input
                                 className="flex focus:outline-none"
-                                style={{ width: `${title.length}ch` }}
+                                style={{ width: `${title.length + 1}ch` }}
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
