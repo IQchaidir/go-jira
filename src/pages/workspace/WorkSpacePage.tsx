@@ -37,7 +37,7 @@ const WorkSpacePage = () => {
             if (title.trim() === "" || title.trim() === workspace.title) {
                 return setTitle(workspace.title)
             }
-            editWorkspace(workspace.id, title)
+            editWorkspace(workspace.id, title.trim())
             setWorkspace(loadWorkspaceById(workspace.id))
             setIsEdit(false)
             toast({

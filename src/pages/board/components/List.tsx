@@ -39,7 +39,7 @@ const List = ({
         if (title.trim() === "" || title.trim() === list.title) {
             return setTitle(list.title)
         }
-        editList(list.id, title, list.boardId)
+        editList(list.id, title.trim(), list.boardId)
         setIsEdit(false)
         fetchDataFromLocal()
         toast({

@@ -27,7 +27,7 @@ const Card = ({ card, fetchDataFromLocal }: { card: card; fetchDataFromLocal: ()
         if (title.trim() === "" || title.trim() === card.title) {
             return setTitle(card.title)
         }
-        editCard(card.id, title, card.listId)
+        editCard(card.id, title.trim(), card.listId)
         setIsEdit(false)
         fetchDataFromLocal()
         toast({

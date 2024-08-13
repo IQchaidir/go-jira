@@ -30,7 +30,7 @@ export function CreateCardDialog({
                 variant: "destructive",
             })
         }
-        createCard(title, listId)
+        createCard(title.trim(), listId)
         fetchDataFromLocal()
         setTitle("")
         setOpen(false)

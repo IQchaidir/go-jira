@@ -30,7 +30,7 @@ export function CreateListDialog({
                 variant: "destructive",
             })
         }
-        createList(title, boardId)
+        createList(title.trim(), boardId)
         fetchDataFromLocal()
         setTitle("")
         setOpen(false)

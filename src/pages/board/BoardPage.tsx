@@ -126,7 +126,7 @@ const BoardPage = () => {
             if (title.trim() === "" || title.trim() === board.title) {
                 return setTitle(board.title)
             }
-            editBoard(board.id, title, workspace.id)
+            editBoard(board.id, title.trim(), workspace.id)
             setIsEdit(false)
             toast({
                 title: "Success edit board!",

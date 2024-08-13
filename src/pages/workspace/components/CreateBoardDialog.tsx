@@ -29,7 +29,7 @@ export function CreateBoardDialog({
                 variant: "destructive",
             })
         }
-        createBoard(title, workspaceId)
+        createBoard(title.trim(), workspaceId)
         fetchBoardFromLocal()
         setTitle("")
         setOpen(false)

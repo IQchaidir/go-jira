@@ -26,7 +26,7 @@ export function CreateWorkspaceDialog({ fetchWorkspaceFromLocal }: { fetchWorksp
                 variant: "destructive",
             })
         }
-        const newWorkspace = createWorkspace(title)
+        const newWorkspace = createWorkspace(title.trim())
         fetchWorkspaceFromLocal()
         setTitle("")
         setOpen(false)
