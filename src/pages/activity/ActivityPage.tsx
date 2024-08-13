@@ -1,6 +1,6 @@
 import Activity from "@/pages/activity/components/Activity"
-import { activity } from "@/types/activity.type"
-import { workspace } from "@/types/workspace.type"
+import { activity } from "@/models/activity.type"
+import { workspace } from "@/models/workspace.type"
 import { filterActivityByWorkspace } from "@/utils/filter"
 import { loadActivities, loadWorkspaceById } from "@/utils/storage"
 import { Building } from "lucide-react"

@@ -2,7 +2,7 @@ import { LayoutDashboard } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 import { CreateWorkspaceDialog } from "./CreateWorkspaceDialog"
 import { useEffect, useState } from "react"
-import { workspace } from "@/types/workspace.type"
+import { workspace } from "@/models/workspace.type"
 import { loadWorkspaces } from "@/utils/storage"
 import { WorkspaceAccordion } from "./WorkSpaceAccordion"
 

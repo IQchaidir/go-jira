@@ -1,7 +1,7 @@
-import { board } from "@/types/board.type"
-import { card } from "@/types/card.type"
-import { list } from "@/types/list.type"
-import { workspace } from "@/types/workspace.type"
+import { board } from "@/models/board.type"
+import { card } from "@/models/card.type"
+import { list } from "@/models/list.type"
+import { workspace } from "@/models/workspace.type"
 import { loadBoards, loadCards, loadLists, loadWorkspaces } from "@/utils/storage"
 import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"
@@ -68,7 +68,7 @@ const Dashboard = () => {
             <h1 className="text-2xl font-semibold gap-2 ">Welcome Back!</h1>
             <hr className="mt-2 mb-5 border" />
             <div className="flex flex-col md:flex-row gap-4 items-start">
-                <div className="flex flex-col w-full md:w-2/3">
+                <div className="flex flex-col w-full md:w-4/5">
                     <section className="grid grid-cols-3 gap-3">
                         {items.map((item) => (
                             <div
@@ -113,9 +113,6 @@ const Dashboard = () => {
                             )}
                         </div>
                     </section>
-                </div>
-                <div className="flex flex-col w-full md:w-1/3 bg-gray-100 rounded-md p-2">
-                    <div className="text-base font-semibold mb-2 ">Recent Boards</div>
                 </div>
             </div>
         </section>

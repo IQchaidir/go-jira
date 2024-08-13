@@ -1,4 +1,4 @@
-import { list } from "@/types/list.type"
+import { list } from "@/models/list.type"
 import { loadBoardById, loadLists, saveLists } from "./storage"
 import { deleteCardByListId } from "./cards"
 import { createActivity } from "./activity"

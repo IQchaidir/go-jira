@@ -1,9 +1,9 @@
-import { card } from "@/types/card.type"
+import { card } from "@/models/card.type"
 import { loadBoardById, loadCards, loadListById, saveCard } from "./storage"
 import { createActivity } from "./activity"
-import { workspace } from "@/types/workspace.type"
-import { board } from "@/types/board.type"
-import { list } from "@/types/list.type"
+import { workspace } from "@/models/workspace.type"
+import { board } from "@/models/board.type"
+import { list } from "@/models/list.type"
 
 export function createCard(title: string, listId: number) {
     const cards: card[] = loadCards()

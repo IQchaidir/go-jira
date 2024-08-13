@@ -1,4 +1,4 @@
-import { card } from "@/types/card.type"
+import { card } from "@/models/card.type"
 
 const DetailCard = ({
     card,

@@ -1,4 +1,4 @@
-import { activity } from "@/types/activity.type"
+import { activity } from "@/models/activity.type"
 import { loadActivities, saveActivity } from "./storage"
 
 export function createActivity(

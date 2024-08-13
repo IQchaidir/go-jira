@@ -1,4 +1,4 @@
-import { activity } from "@/types/activity.type"
+import { activity } from "@/models/activity.type"
 import { Activity as IconActivity } from "lucide-react"
 
 const Activity = ({ activity }: { activity: activity }) => {

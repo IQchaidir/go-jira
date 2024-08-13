@@ -1,4 +1,4 @@
-import { card } from "@/types/card.type"
+import { card } from "@/models/card.type"
 import { editCard } from "@/utils/cards"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"

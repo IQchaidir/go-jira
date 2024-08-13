@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { workspace } from "@/types/workspace.type"
+import { workspace } from "@/models/workspace.type"
 import { Activity, Building, Clipboard } from "lucide-react"
 import { Link } from "react-router-dom"
 

@@ -1,5 +1,5 @@
-import { card } from "@/types/card.type"
-import { list } from "@/types/list.type"
+import { card } from "@/models/card.type"
+import { list } from "@/models/list.type"
 import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { useState } from "react"
 import { CSS } from "@dnd-kit/utilities"

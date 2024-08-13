@@ -1,4 +1,4 @@
-import { workspace } from "@/types/workspace.type"
+import { workspace } from "@/models/workspace.type"
 import { loadWorkspaces, saveWorkspace } from "./storage"
 import { deleteBoardByWorkspaceId } from "./boards"
 import { createActivity, deleteActivity } from "./activity"

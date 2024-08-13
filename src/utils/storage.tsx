@@ -1,8 +1,8 @@
-import { activity } from "@/types/activity.type"
-import { board } from "@/types/board.type"
-import { card } from "@/types/card.type"
-import { list } from "@/types/list.type"
-import { workspace } from "@/types/workspace.type"
+import { activity } from "@/models/activity.type"
+import { board } from "@/models/board.type"
+import { card } from "@/models/card.type"
+import { list } from "@/models/list.type"
+import { workspace } from "@/models/workspace.type"
 
 export const defaultWorkspaces = [
     {
