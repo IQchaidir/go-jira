@@ -1,11 +1,11 @@
 import { card } from "@/types/card.type"
 import DetailCard from "./DetailCard"
 import { Link } from "react-router-dom"
-import { cardDetails } from "@/utils/getDetail"
 import { total } from "@/utils/total"
 import { workspace } from "@/types/workspace.type"
 import { board } from "@/types/board.type"
 import { list } from "@/types/list.type"
+import { cardDetails } from "@/utils/cards"
 
 const SearchResult = ({
     workspaces,

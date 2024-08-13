@@ -2,37 +2,43 @@ import { board } from "@/types/board.type"
 import { card } from "@/types/card.type"
 import { list } from "@/types/list.type"
 import { workspace } from "@/types/workspace.type"
-import { cardDetails } from "@/utils/getDetail"
 import { loadBoards, loadCards, loadLists, loadWorkspaces } from "@/utils/storage"
 import { total } from "@/utils/total"
 import { Building, Clipboard, ListCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 import DetailCard from "./DetailCard"
-import { Link, useLocation, useNavigation } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { searchCard } from "@/utils/search"
 import SearchResult from "./SearchResult"
+import { cardDetails } from "@/utils/cards"
 
 const Dashboard = () => {
+    const location = useLocation()
+    const params = new URLSearchParams(location.search)
+    const query = params.get("search") || ""
     const [workspaces, setWorkspaces] = useState<workspace[]>([])
     const [boards, setBoards] = useState<board[]>([])
     const [cards, setCards] = useState<card[]>([])
     const [lists, setLists] = useState<list[]>([])
     const [filterCards, setFilterCards] = useState<card[]>([])
-    const [searchQuery, setSearchQuery] = useState("")
-    const location = useLocation()
-    const navigation = useNavigation()
+    const [searchQuery, setSearchQuery] = useState(query)
 
     useEffect(() => {
         setWorkspaces(loadWorkspaces())
         setBoards(loadBoards())
         setCards(loadCards())
         setLists(loadLists())
+    }, [])
 
+    useEffect(() => {
         const params = new URLSearchParams(location.search)
         const query = params.get("search") || ""
         setSearchQuery(query)
-        setFilterCards(searchCard(cards, query))
-    }, [location.search, navigation.state])
+    }, [location.search])
+
+    useEffect(() => {
+        if (cards.length > 0 && searchQuery) setFilterCards(searchCard(cards, searchQuery))
+    }, [cards, searchQuery])
 
     const items = [
         {

@@ -1,27 +1,37 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
+import { useDebounce } from "use-debounce"
 
 const SearchInput = () => {
-    const [searchQuery, setSearchQuery] = useState<string>("")
-    const navigate = useNavigate()
     const location = useLocation()
+    const params = new URLSearchParams(location.search)
+    const initialQuery = params.get("search") || ""
+
+    const [searchQuery, setSearchQuery] = useState<string>(initialQuery)
+    const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const params = new URLSearchParams(location.search)
         const query = params.get("search") || ""
         setSearchQuery(query)
-    }, [])
+    }, [location.search])
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        if (params.get("search") !== debouncedSearchQuery) {
+            if (debouncedSearchQuery) {
+                params.set("search", debouncedSearchQuery)
+            } else {
+                params.delete("search")
+            }
+            navigate(`/?${params.toString()}`, { replace: true })
+        }
+    }, [debouncedSearchQuery, navigate, location.search])
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const query = event.target.value.toLowerCase()
         setSearchQuery(query)
-        const params = new URLSearchParams(location.search)
-        if (query) {
-            params.set("search", query)
-        } else {
-            params.delete("search")
-        }
-        navigate(`/?${params.toString()}`)
     }
 
     return (

@@ -1,6 +1,9 @@
 import { card } from "@/types/card.type"
 import { loadBoardById, loadCards, loadListById, saveCard } from "./storage"
 import { createActivity } from "./activity"
+import { workspace } from "@/types/workspace.type"
+import { board } from "@/types/board.type"
+import { list } from "@/types/list.type"
 
 export function createCard(title: string, listId: number) {
     const cards: card[] = loadCards()
@@ -57,4 +60,22 @@ export function deleteCardByListId(ListId: number) {
     const cards = loadCards()
     const updatecards = cards.filter((card: card) => card.listId !== ListId)
     saveCard(updatecards)
+}
+
+export function cardDetails(workspaces: workspace[], boards: board[], lists: list[], card: card) {
+    const list = lists.find((list) => {
+        return card.listId === list.id
+    })
+    const board = boards.find((board) => {
+        return list?.boardId === board.id
+    })
+    const workspace = workspaces.find((workspace) => {
+        return board?.workspaceId === workspace.id
+    })
+
+    return {
+        listTitle: list?.title,
+        board: board,
+        workspace: workspace,
+    }
 }
