@@ -14,13 +14,7 @@ import { toast } from "./ui/use-toast"
 import { useNavigate } from "react-router-dom"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-
-const schema = z.object({
-    title: z.string().min(1, "Title is required"),
-})
-
-type FormValues = z.infer<typeof schema>
+import { FormValues, schema } from "@/lib/validation"
 
 export function CreateWorkspaceDialog({ fetchWorkspaceFromLocal }: { fetchWorkspaceFromLocal: () => void }) {
     const {

@@ -8,8 +8,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { toast } from "@/components/ui/use-toast"
+import { FormValues, schema } from "@/lib/validation"
 import { createBoard } from "@/utils/boards"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 export function CreateBoardDialog({
     fetchBoardFromLocal,
@@ -18,20 +21,18 @@ export function CreateBoardDialog({
     fetchBoardFromLocal: () => void
     workspaceId: number
 }) {
-    const [title, setTitle] = useState<string>("")
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormValues>({
+        resolver: zodResolver(schema),
+    })
     const [open, setOpen] = useState<boolean>(false)
 
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        if (title.trim() === "") {
-            return toast({
-                title: "Title cannot be empty!",
-                variant: "destructive",
-            })
-        }
-        createBoard(title.trim(), workspaceId)
+    const onSubmit: SubmitHandler<FormValues> = (data) => {
+        createBoard(data.title.trim(), workspaceId)
         fetchBoardFromLocal()
-        setTitle("")
         setOpen(false)
         toast({
             title: "Success create board!",
@@ -39,7 +40,7 @@ export function CreateBoardDialog({
     }
 
     return (
-        <Dialog open={open}>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild onClick={() => setOpen(true)}>
                 <div className="flex rounded-md h-32 bg-gray-100 items-center justify-center font-semibold transition-transform duration-300 transform hover:scale-105 cursor-pointer">
                     Create New Board
@@ -49,25 +50,23 @@ export function CreateBoardDialog({
                 <DialogHeader>
                     <DialogTitle>Create Board</DialogTitle>
                 </DialogHeader>
-                <div>
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Board title...."
-                            className="w-full border border-black rounded-md p-1 "
-                        />
-                    </form>
-                </div>
-                <DialogFooter>
-                    <Button variant={"destructive"} onClick={() => setOpen(false)}>
-                        Cancel
-                    </Button>
-                    <Button type="submit" onClick={handleSubmit}>
-                        Create!
-                    </Button>
-                </DialogFooter>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <input
+                        type="text"
+                        placeholder="Board title...."
+                        className="w-full border border-black rounded-md p-1 "
+                        {...register("title")}
+                    />
+                    <div className="h-6">
+                        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+                    </div>
+                    <DialogFooter>
+                        <Button type="button" variant={"destructive"} onClick={() => setOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button type="submit">Create!</Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )

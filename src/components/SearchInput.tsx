@@ -13,12 +13,6 @@ const SearchInput = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search)
-        const query = params.get("search") || ""
-        setSearchQuery(query)
-    }, [location.search])
-
-    useEffect(() => {
-        const params = new URLSearchParams(location.search)
         if (params.get("search") !== debouncedSearchQuery) {
             if (debouncedSearchQuery) {
                 params.set("search", debouncedSearchQuery)
@@ -27,7 +21,7 @@ const SearchInput = () => {
             }
             navigate(`/?${params.toString()}`, { replace: true })
         }
-    }, [debouncedSearchQuery, navigate, location.search])
+    }, [debouncedSearchQuery])
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const query = event.target.value.toLowerCase()
