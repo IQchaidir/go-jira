@@ -11,6 +11,7 @@ import { Link, useLocation } from "react-router-dom"
 import { searchCard } from "@/utils/search"
 import SearchResult from "./SearchResult"
 import { cardDetails } from "@/utils/cards"
+import SearchInput from "./SearchInput"
 
 const Dashboard = () => {
     const location = useLocation()
@@ -58,63 +59,72 @@ const Dashboard = () => {
         },
     ]
 
-    if (searchQuery)
-        return (
-            <SearchResult boards={boards} filterCards={filterCards} lists={lists} workspaces={workspaces} />
-        )
-
     return (
-        <section className="flex flex-col  mt-10 px-3 md:px-7 w-full">
-            <h1 className="text-2xl font-semibold gap-2 ">Welcome Back!</h1>
-            <hr className="mt-2 mb-5 border" />
-            <div className="flex flex-col md:flex-row gap-4 items-start">
-                <div className="flex flex-col w-full md:w-4/5">
-                    <section className="grid grid-cols-3 gap-3">
-                        {items.map((item) => (
-                            <div
-                                key={item.name}
-                                className="flex items-center px-3 p-2 bg-blue-500 justify-between rounded-md"
-                            >
-                                <div className="flex flex-col text-white">
-                                    <span className="text-3xl font-semibold">{item.total}</span>
-                                    <span className="text-xs">Total {item.name}</span>
-                                </div>
-                                {item.logo}
-                            </div>
-                        ))}
-                    </section>
-                    <section className="flex flex-col mt-3">
-                        <div className="text-base font-semibold mb-2">Recent Cards</div>
-                        <div className="flex flex-col gap-3 mb-5">
-                            {cards.length === 0 ? (
-                                <p>No card have been created yet.</p>
-                            ) : (
-                                cards
-                                    .sort((a, b) => b.id - a.id)
-                                    .slice(0, 10)
-                                    .map((card) => {
-                                        const { workspace, board, listTitle } = cardDetails(
-                                            workspaces,
-                                            boards,
-                                            lists,
-                                            card
-                                        )
-                                        return (
-                                            <Link key={card.id} to={`board/${board?.id}`}>
-                                                <DetailCard
-                                                    card={card}
-                                                    workspaceTitle={workspace?.title || ""}
-                                                    boardTitle={board?.title || ""}
-                                                    listTitle={listTitle || ""}
-                                                />
-                                            </Link>
-                                        )
-                                    })
-                            )}
-                        </div>
-                    </section>
-                </div>
+        <section className="flex flex-col mt-10 px-3 md:px-7 w-full">
+            <div className="flex justify-between">
+                <p className="text-2xl font-semibold">
+                    {searchQuery ? `Search result (${total(filterCards)})` : "Welcome Back!"}
+                </p>
+                <SearchInput />
             </div>
+            <hr className="mt-2 mb-5 border" />
+            {searchQuery ? (
+                <SearchResult
+                    boards={boards}
+                    filterCards={filterCards}
+                    lists={lists}
+                    workspaces={workspaces}
+                />
+            ) : (
+                <div className="flex flex-col md:flex-row gap-4 items-start">
+                    <div className="flex flex-col w-full md:w-4/5">
+                        <section className="grid grid-cols-3 gap-3">
+                            {items.map((item) => (
+                                <div
+                                    key={item.name}
+                                    className="flex items-center px-3 p-2 bg-blue-500 justify-between rounded-md"
+                                >
+                                    <div className="flex flex-col text-white">
+                                        <span className="text-3xl font-semibold">{item.total}</span>
+                                        <span className="text-xs">Total {item.name}</span>
+                                    </div>
+                                    {item.logo}
+                                </div>
+                            ))}
+                        </section>
+                        <section className="flex flex-col mt-5">
+                            <div className="text-base font-semibold mb-3">Recent Cards</div>
+                            <div className="flex flex-col gap-3 mb-5">
+                                {cards.length === 0 ? (
+                                    <p>No card have been created yet.</p>
+                                ) : (
+                                    cards
+                                        .sort((a, b) => b.id - a.id)
+                                        .slice(0, 10)
+                                        .map((card) => {
+                                            const { workspace, board, listTitle } = cardDetails(
+                                                workspaces,
+                                                boards,
+                                                lists,
+                                                card
+                                            )
+                                            return (
+                                                <Link key={card.id} to={`board/${board?.id}`}>
+                                                    <DetailCard
+                                                        card={card}
+                                                        workspaceTitle={workspace?.title || ""}
+                                                        boardTitle={board?.title || ""}
+                                                        listTitle={listTitle || ""}
+                                                    />
+                                                </Link>
+                                            )
+                                        })
+                                )}
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            )}
         </section>
     )
 }
